@@ -26,6 +26,12 @@
 	$fragment->setVar('title', 'Beispiel: Module Output', false); //todo
 	$fragment->setVar('body', rex_string::highlight($code), false);
 	echo $fragment->parse('core/page/section.php');
+
+        $fragment = new rex_fragment();
+	$fragment->setVar('class', 'info', false);
+	$fragment->setVar('title', 'Weitere Infos', false); //todo
+	$fragment->setVar('body', '<a target="_blank" href="https://github.com/akuehnis/redaxo5_addon_tinymce4">https://github.com/akuehnis/redaxo5_addon_tinymce4</a>', false);
+	echo $fragment->parse('core/page/section.php');
 	
 	
 ?>
