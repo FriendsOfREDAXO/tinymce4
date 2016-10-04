@@ -1,0 +1,11 @@
+package: tinymce4
+version: '0.1.0'
+author: 'Adrian Kühnis'
+requires:
+    redaxo: ^5.1.0
+#page:
+#    title: 'Formulare'  
+#    perm: form_in_module[]
+#    subpages:
+#        index: { title: 'Formulare' }
+#        settings: { title: 'Einstellungen' }
