@@ -8,8 +8,8 @@ class ProfileRepository
     public function findAll() {
         $v = \rex_config::get('tinymce4', 'profiles');
         $a = unserialize($v);
-        if (null === $a) {
-            return array();
+        if (!is_array($a)) {
+            $a = array();
         }
         $r = array();
         foreach ($a as $data) {
