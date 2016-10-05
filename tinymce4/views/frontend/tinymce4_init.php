@@ -44,12 +44,13 @@ $(document).on('ready pjax:success',function() {
 <?php foreach ($profiles as $profile):?>
     tinymce.remove("<?php echo $profile->selector;?>");
     tinymce.init({
+        file_browser_callback : redaxo5FileBrowser,
         selector: '<?php echo $profile->selector;?>',
-        height: 500,
         plugins: '<?php echo $profile->plugins;?>',
-        toolbar: '<?php echo $profile->toolbar;?>',
-        file_browser_callback : redaxo5FileBrowser
-
+        toolbar: '<?php echo $profile->toolbar;?>'
+        <?php if ('' != $profile->initparams):?>
+        ,<?php echo $profile->initparams;?>
+        <?php endif;?>
     });
 <?php endforeach;?>
 });
