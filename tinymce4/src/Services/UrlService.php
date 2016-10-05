@@ -12,7 +12,7 @@ class UrlService
 
     public function getUrl($path, $parameter = array()){
         if (\rex::isBackend()) {
-            return 'index.php?page=form_in_module/index&r='.$path;
+            return 'index.php?page=tinymce4&r='.$path;
         }
     }
 

@@ -1,5 +1,3 @@
-
-
 function redaxo5FileBrowser (field_name, url, type, win) {
      console.log("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
 
@@ -14,15 +12,20 @@ function redaxo5FileBrowser (field_name, url, type, win) {
     } else if ('file' == type) {
         var browser_name = 'Link auswählen';
         cmsURL+= '/file/index';
+    } else if ('media' == type) {
+        var browser_name = 'Medium auswählen';
+        cmsURL+= '/media/index';
     }
     var m = location.href.match(/clang=[0-9]+/);
     if (null != m) {
         cmsURL+= '&' + m[0].replace('clang', 'clang_id');
     }
-    
 
     tinyMCE.activeEditor.windowManager.open({
         file : cmsURL,
+        <?php if ('' != $lang_pack):?>
+            language:'<?php echo $lang_pack;?>',
+        <?php endif;?>
         title : browser_name,
         width : 420,  // Your dimensions may differ - toy around with them!
         height : 400,
@@ -38,18 +41,16 @@ function redaxo5FileBrowser (field_name, url, type, win) {
 
 
 $(document).on('ready pjax:success',function() {
-    tinymce.remove("textarea.tinyMCEEditor");
+<?php foreach ($profiles as $profile):?>
+    tinymce.remove("<?php echo $profile->selector;?>");
     tinymce.init({
-        selector: 'textarea.tinyMCEEditor',
+        selector: '<?php echo $profile->selector;?>',
         height: 500,
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste code'
-        ],
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-        //content_css: 'assets/addon/tinymce4/tinymce4.css',
+        plugins: '<?php echo $profile->plugins;?>',
+        toolbar: '<?php echo $profile->toolbar;?>',
         file_browser_callback : redaxo5FileBrowser
 
     });
+<?php endforeach;?>
 });
+

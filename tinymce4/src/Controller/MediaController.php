@@ -1,7 +1,7 @@
 <?php
 namespace Tinymce4\Controller;
 
-class ImageController 
+class MediaController 
 {
     public $container;
 
@@ -9,23 +9,26 @@ class ImageController
         $this->container = $container; 
     }
 
-    public function indexAction($category_id) {
-        $sql = "filetype IN ('image/png', 'image/jpeg', 'image/gif')";
-        if (0 == $category) {
+    public function indexAction() {
+        $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
+        $sql = "filetype LIKE 'video%'";
+        if (0 == $category_id) {
             $media = $this->container->get('MediaRepository')
                 ->findWhere($sql, array(), array('originalname'=>'ASC'));
         } else {
             $sql.=" AND category_id=?";
             $media = $this->container->get('MediaRepository')
-                ->findWhere($sql, array(intval($category_id)), array('originalname'=>'ASC'));
+                ->findWhere($sql, array($category_id), array('originalname'=>'ASC'));
         }
+
         return $this->container->get('RenderService')->render(
-            'frontend/image_index.php', array(
+            'frontend/media_index.php', array(
                 'media_list' => $media,
-                'form' => $this->container->get('FormService'),
                 'UrlService' => $this->container->get('UrlService'),
                 'Translator' => $this->container->get('TranslatorService'),
                 'category_choices' => $this->container->get('MediaCategoryRepository')->getCategoryChoices(),
+                'form' => $this->container->get('FormService'),
+                'category_id' => $category_id,
             ));
     }
     public function detailAction($form_id_file) {

@@ -15,4 +15,9 @@ $container->setParameter('translator_pathes',  array(
     __DIR__.'/../translations',
     $container->getParameter('data_dir').'/translations',
 ));
+// Map redaxo backend languages to tinymce lang package
+$container->setParameter('be_lang_map', array(
+    'de_de' => 'de',
+    'en_gb' => 'en_gb',
+));
 
