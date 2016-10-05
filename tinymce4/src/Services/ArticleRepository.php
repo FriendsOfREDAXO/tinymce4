@@ -11,12 +11,12 @@ class ArticleRepository extends Repository
 
     public function getCategoryChoices($clang_id) {
         $choices = array(
-            0 => 'Root',
+            0 => 'Homepage',
         );
         $list = $this->findBy(array(
             'startarticle' => 1,
             'clang_id' => $clang_id,
-        ), array('priority' => 'ASC', 'path' => 'ASC'));
+        ), array('catname' => 'ASC'));
         foreach ($list as $cat) {
             $choices[$cat->id] = $cat->catname;
         }

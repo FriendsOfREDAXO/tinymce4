@@ -23,9 +23,13 @@ class FileController
                     ), array('priority' => 'ASC'));
             } else {
                 $page_list = $this->container->get('ArticleRepository')
-                    ->findWhere("id=? AND startarticle=1
+                    ->findWhere("(
+                       ( id=? AND startarticle=1)
+                       OR
+                       ( parent_id=? AND startarticle=0)
+                   )
                     AND clang_id=?
-                    ", array($category_id, $clang_id));
+                    ", array($category_id, $category_id, $clang_id));
             }
             $link_list = array();
             foreach ($page_list as $p) {

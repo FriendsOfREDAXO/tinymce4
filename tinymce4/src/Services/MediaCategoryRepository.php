@@ -11,7 +11,7 @@ class MediaCategoryRepository extends Repository
 
     
     public function getCategoryChoices() {
-        $list = $this->findAll();
+        $list = $this->findAll(array('name' => 'ASC'));
         $a = array();
         $a[0] = 'Alle';
         foreach ($list as $cat) {

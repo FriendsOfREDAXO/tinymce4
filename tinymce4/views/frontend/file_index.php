@@ -15,14 +15,17 @@
         'class' => 'form-control',
     ));?>
 </div>
-<div class="form-group">
-<label>Sprache</label>
-<?php echo $form->select('clang_id', $language_choices, $clang_id, array(
-        'onchange' => 'setType()',
-        'class' => 'form-control',
-    ));?>
-
-</div>
+<?php if ('link' == $type):?>
+    <div class="form-group">
+    <label>Sprache</label>
+    <?php echo $form->select('clang_id', $language_choices, $clang_id, array(
+            'onchange' => 'setType()',
+            'class' => 'form-control',
+        ));?>
+    </div>
+<?php else:?>
+    <input type="hidden" name="clang_id" value="<?php echo $clang_id;?>" />
+<?php endif;?>
 <div class="form-group">
 <label>Kategorie</label>
 <?php echo $form->select('category_id', $category_choices, $category_id, array(
@@ -31,6 +34,17 @@
 ));?>
 </div>
 </form>
+<?php if ('link' == $type):?>
+    <h6>Seiten:</h6>
+<?php else: ?>
+    <h6>Dateien:</h6>
+<?php endif;?>
+<?php if (0 == count($link_list)) :?>
+<div class="alert alert-info">
+    Keine gefunden 
+</div>
+<?php endif;?>
+
 <ul class="list-group">
 <?php foreach ($link_list as $link):?>
 <li class="list-group-item">
