@@ -24,6 +24,13 @@ class AssetController
                 'profiles' => $this->container->get('ProfileRepository')->findAll(),
             ));
     }
+    public function cssAction($file) {
+        die('tst');
+        header('Content-Type: text/css');
+        return $this->container->get('RenderService')->render(
+            'frontend/tinymce4_css.php', array(
+            ));
+    }
     
 }
 

@@ -6,6 +6,7 @@ if (rex::isBackend()) {
     $container->addRoute('/link/index', '\Tinymce4\Controller\DataController:indexAction');
     $container->addRoute('/media/index', '\Tinymce4\Controller\MediaController:indexAction');
     $container->addRoute('/asset_js', '\Tinymce4\Controller\AssetController:jsAction');
+    //$container->addRoute('/asset_css', '\Tinymce4\Controller\AssetController:cssAction');
     $container->addRoute('/profile/index', '\Tinymce4\Controller\ProfileController:indexAction');
     $container->addRoute('/profile/edit', '\Tinymce4\Controller\ProfileController:editAction');
     $container->addRoute('/profile/remove', '\Tinymce4\Controller\ProfileController:removeAction');

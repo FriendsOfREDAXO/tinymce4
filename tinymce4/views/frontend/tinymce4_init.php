@@ -45,6 +45,7 @@ $(document).on('ready pjax:success',function() {
     tinymce.remove("<?php echo $profile->selector;?>");
     tinymce.init({
         file_browser_callback : redaxo5FileBrowser,
+        content_css: '<?php echo \rex_url::addonAssets('tinymce4', 'tinymce4.css');?>',
         selector: '<?php echo $profile->selector;?>',
         plugins: '<?php echo $profile->plugins;?>',
         toolbar: '<?php echo $profile->toolbar;?>'
