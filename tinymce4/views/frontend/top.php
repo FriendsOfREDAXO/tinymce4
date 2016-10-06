@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" media="all" href="<?php echo rex_url::addonAssets('be_style', 'css/styles.css');?>" />
-<link rel="stylesheet" type="text/css" media="all" href="<?php echo rex_url::addonAssets('be_style', 'css/bootstrap-select.min.css');?>" />
+<script type="text/javascript" src="<?php echo rex_url::addonAssets('tinymce4', 'jquery/jquery.min.js');?>" ></script>
+<link rel="stylesheet" type="text/css" media="all" href="<?php echo rex_url::addonAssets('tinymce4', 'bootstrap/css/bootstrap.min.css');?>" />
 </head>
 <body>

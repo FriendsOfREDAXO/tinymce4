@@ -10,16 +10,29 @@ class MediaController
     }
 
     public function indexAction() {
+        $filter = $this->container->get('FilterService');
         $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
+        $search = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
         $sql = "filetype LIKE 'video%'";
-        if (0 == $category_id) {
-            $media = $this->container->get('MediaRepository')
-                ->findWhere($sql, array(), array('originalname'=>'ASC'));
-        } else {
-            $sql.=" AND category_id=?";
-            $media = $this->container->get('MediaRepository')
-                ->findWhere($sql, array($category_id), array('originalname'=>'ASC'));
+        $binds = array();
+        foreach (explode(' ', $search) as $s) {
+            if ('' == $s) continue;
+            $sql.= " AND (
+                `filename` LIKE ? 
+                OR `originalname` LIKE ?
+                OR `title` LIKE ?
+                )
+                ";
+            $binds[] = '%'.$s.'%';
+            $binds[] = '%'.$s.'%';
+            $binds[] = '%'.$s.'%';
         }
+        if (0 < $category_id) {
+            $sql.=" AND category_id=?";
+            $binds[] = $category_id;
+        }
+        $media = $this->container->get('MediaRepository')
+            ->findWhere($sql, $binds, array('originalname'=>'ASC'));
 
         return $this->container->get('RenderService')->render(
             'frontend/media_index.php', array(
@@ -29,41 +42,10 @@ class MediaController
                 'category_choices' => $this->container->get('MediaCategoryRepository')->getCategoryChoices(),
                 'form' => $this->container->get('FormService'),
                 'category_id' => $category_id,
+                'search' => $search,
             ));
     }
-    public function detailAction($form_id_file) {
-        list($form_id, $file) = explode('_', $form_id_file, 2);
-        $form = $this->container->get('FormRepository')->find($form_id);
-        $dir = $this->container->getParameter('data_dir').'/submissions/f'.$form_id;
-        $data = unserialize(file_get_contents($dir.'/'.$file));
-        return $this->container->get('RenderService')->render(
-            'backend/data_detail.php', array(
-                'form' => $form,
-                'data' => $data,
-                'UrlService' => $this->container->get('UrlService'),
-                'Translator' => $this->container->get('TranslatorService'),
-            ));
-
-    }
-    public function removeAction($form_id_file) {
-        list($form_id, $file) = explode('_', $form_id_file, 2);
-        $form = $this->container->get('FormRepository')->find($form_id);
-        $dir = $this->container->getParameter('data_dir').'/submissions/f'.$form_id;
-        unlink($dir.'/'.$file);
-        header("Location: ". $this->container->get('UrlService')->getUrl('/data/list/'.$form_id));
-        die();
-
-    }
-    public function removeAllAction($form_id) {
-        $dir = $this->container->getParameter('data_dir').'/submissions/f'.$form_id;
-        foreach (scandir($dir) as $f) {
-            if (in_array($f, ['.','..'])) continue;
-            unlink($dir.'/'.$f);
-        }
-        header("Location: ". $this->container->get('UrlService')->getUrl('/data/list/'.$form_id));
-        die();
-
-    }
+    
 }
 
 

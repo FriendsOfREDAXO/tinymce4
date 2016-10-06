@@ -7,25 +7,32 @@
     id="category_selection"
 >
 <input type="hidden" name="tinymce4_call" value="/file/index" />
-<label>Link-Typ</label>
-<div class="form-group">
-<?php echo $form->select('type', array('link' => 'Seite', 'media' => 'Datei'),
-    $type, array(
-        'onchange' => 'setType()',
-        'class' => 'form-control',
-    ));?>
-</div>
-<?php if ('link' == $type):?>
-    <div class="form-group">
-    <label>Sprache</label>
-    <?php echo $form->select('clang_id', $language_choices, $clang_id, array(
-            'onchange' => 'setType()',
-            'class' => 'form-control',
-        ));?>
+<div class="row">
+    <div class="col-xs-6">
+        <label>Link-Typ</label>
+        <div class="form-group">
+        <?php echo $form->select('type', array('link' => 'Seite', 'media' => 'Datei'),
+            $type, array(
+                'onchange' => 'setType()',
+                'class' => 'form-control',
+            ));?>
+        </div>
     </div>
-<?php else:?>
-    <input type="hidden" name="clang_id" value="<?php echo $clang_id;?>" />
-<?php endif;?>
+    <div class="col-xs-6">
+        <?php if ('link' == $type):?>
+            <div class="form-group">
+            <label>Sprache</label>
+            <?php echo $form->select('clang_id', $language_choices, $clang_id, array(
+                    'onchange' => 'setType()',
+                    'class' => 'form-control',
+                ));?>
+            </div>
+        <?php else:?>
+            <input type="hidden" name="clang_id" value="<?php echo $clang_id;?>" />
+        <?php endif;?>
+    </div>
+</div>
+
 <div class="form-group">
 <label>Kategorie</label>
 <?php echo $form->select('category_id', $category_choices, $category_id, array(
@@ -33,6 +40,18 @@
         'class' => 'form-control',
 ));?>
 </div>
+
+<?php if ('media' == $type):?>
+    <div class="form-group">
+    <?php echo $form->text('search', $search, array(
+        'onchange' => 'reload()',
+        'class' => 'form-control',
+        'placeholder' => 'Suche',
+
+    ));?>
+    </div>
+<?php endif;?>
+
 </form>
 <?php if ('link' == $type):?>
     <h6>Seiten:</h6>

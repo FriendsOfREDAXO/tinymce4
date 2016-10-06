@@ -10,9 +10,11 @@ class FileController
     }
 
     public function indexAction() {
+        $filter = $this->container->get('FilterService');
         $type = isset($_GET['type']) ? $_GET['type'] : 'link';
         $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
         $clang_id = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
+        $search = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
         if ('link' == $type) {
             if (0 == $category_id) {
                 $page_list = $this->container->get('ArticleRepository')
@@ -41,19 +43,35 @@ class FileController
             $category_choices = $this->container->get('ArticleRepository')
                 ->getCategoryChoices($clang_id);
         } elseif ('media' == $type) {
-            if (0 == $category_id) {
-                $media = $this->container->get('MediaRepository')
-                    ->findAll(array('originalname'=>'ASC'));
-            } else {
-                $sql = "category_id=?";
-                $media = $this->container->get('MediaRepository')
-                    ->findWhere($sql, array($category_id), array('originalname'=>'ASC'));
+            $binds = array();
+            $sql = "1";
+            foreach (explode(' ', $search) as $s) {
+                if ('' == $s) continue;
+                $sql.= " AND (
+                    `filename` LIKE ? 
+                    OR `originalname` LIKE ?
+                    OR `title` LIKE ?
+                    )
+                    ";
+                $binds[] = '%'.$s.'%';
+                $binds[] = '%'.$s.'%';
+                $binds[] = '%'.$s.'%';
             }
+            if (0 < $category_id) {
+                $sql = "category_id=?";
+                $binds[] = $category_id;
+            }
+            $media = $this->container->get('MediaRepository')
+                ->findWhere($sql, $binds, array('originalname'=>'ASC'));
             $link_list = array();
             foreach ($media as $m) {
+                $name = $m->originalname;
+                if ('' != $m->title) {
+                    $name.= ' | '.$m->title;
+                }
                 $link_list[] = array(
                     'url' => \rex_url::media($m->filename),
-                    'name' => $m->originalname,
+                    'name' => $name,
                 );
             }
             $category_choices = $this->container->get('MediaCategoryRepository')
@@ -71,41 +89,10 @@ class FileController
                 'category_choices' => $category_choices,
                 'language_choices' => $this->container->get('LanguageService')->getLanguageChoices(),
                 'clang_id' => $clang_id,
+                'search' => $search,
             ));
     }
-    public function detailAction($form_id_file) {
-        list($form_id, $file) = explode('_', $form_id_file, 2);
-        $form = $this->container->get('FormRepository')->find($form_id);
-        $dir = $this->container->getParameter('data_dir').'/submissions/f'.$form_id;
-        $data = unserialize(file_get_contents($dir.'/'.$file));
-        return $this->container->get('RenderService')->render(
-            'backend/data_detail.php', array(
-                'form' => $form,
-                'data' => $data,
-                'UrlService' => $this->container->get('UrlService'),
-                'Translator' => $this->container->get('TranslatorService'),
-            ));
-
-    }
-    public function removeAction($form_id_file) {
-        list($form_id, $file) = explode('_', $form_id_file, 2);
-        $form = $this->container->get('FormRepository')->find($form_id);
-        $dir = $this->container->getParameter('data_dir').'/submissions/f'.$form_id;
-        unlink($dir.'/'.$file);
-        header("Location: ". $this->container->get('UrlService')->getUrl('/data/list/'.$form_id));
-        die();
-
-    }
-    public function removeAllAction($form_id) {
-        $dir = $this->container->getParameter('data_dir').'/submissions/f'.$form_id;
-        foreach (scandir($dir) as $f) {
-            if (in_array($f, ['.','..'])) continue;
-            unlink($dir.'/'.$f);
-        }
-        header("Location: ". $this->container->get('UrlService')->getUrl('/data/list/'.$form_id));
-        die();
-
-    }
+    
 }
 
 

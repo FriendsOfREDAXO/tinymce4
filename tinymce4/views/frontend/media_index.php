@@ -7,10 +7,19 @@
     id="category_selection"
 >
 <input type="hidden" name="tinymce4_call" value="/media/index" />
-<div class="form-group">
+<div class="form-group" style="padding-top:10px">
 <?php echo $form->select('category_id', $category_choices, $category_id, array(
     'onchange' => 'reload()',
     'class' => 'form-control',
+
+));?>
+</div>
+
+<div class="form-group">
+<?php echo $form->text('search', $search, array(
+    'onchange' => 'reload()',
+    'class' => 'form-control',
+    'placeholder' => 'Suche',
 
 ));?>
 </div>
@@ -21,12 +30,13 @@
 <?php endif;?>
 <?php foreach ($media_list as $medium):?>
 <div class="col-xs-3">
-<a style="width:80px;height:80px;display:inline-block;background-repeat:no-repeat;background-position:center center;background-image:url(
-index.php?rex_media_type=rex_mediapool_preview&rex_media_file=<?php
-echo urlencode($medium->filename);?>);" 
-data-value="index.php?rex_media_type=tinymcewysiwyg&rex_media_file=<?php
-echo urlencode($medium->filename);?>" 
-onclick="returnImage(this)" ></a>
+<a style="cursor:pointer;width:80px;height:80px;display:inline-block;background-repeat:no-repeat;background-position:center center;background-image:url(
+    index.php?rex_media_type=rex_mediapool_preview&rex_media_file=<?php
+    echo urlencode($medium->filename);?>);" 
+    data-value="index.php?rex_media_type=tinymcewysiwyg&rex_media_file=<?php
+    echo urlencode($medium->filename);?>" 
+    title="<?php echo $medium->originalname;?> | <?php echo $medium->title;?>"
+    onclick="returnImage(this)" ></a>
 </div>
 <?php endforeach;?>
 
