@@ -45,12 +45,18 @@ $(document).on('ready pjax:success',function() {
     tinymce.remove("<?php echo $profile->selector;?>");
     tinymce.init({
         file_browser_callback : redaxo5FileBrowser,
-        content_css: '<?php echo \rex_url::addonAssets('tinymce4', 'tinymce4.css');?>',
-        selector: '<?php echo $profile->selector;?>',
-        plugins: '<?php echo $profile->plugins;?>',
-        toolbar: '<?php echo $profile->toolbar;?>'
+        selector: '<?php echo $profile->selector;?>'
+
+        <?php if ('' != $profile->plugins):?>
+            ,plugins: '<?php echo $profile->plugins;?>'
+        <?php endif;?>
+
+        <?php if ('' != $profile->toolbar):?>
+            ,toolbar: '<?php echo $profile->toolbar;?>'
+        <?php endif;?>
+
         <?php if ('' != $profile->initparams):?>
-        ,<?php echo $profile->initparams;?>
+            ,<?php echo $profile->initparams;?>
         <?php endif;?>
     });
 <?php endforeach;?>
