@@ -139,6 +139,17 @@ class Repository {
             return $this->getModels($aData);
         }
     }
+    public function countWhere($where, $binds, $limit=null, $offset=null) {
+        $sql = "SELECT count(*) FROM `". $this->table. "` WHERE $where"; 
+        if (null != $limit){
+            $sql.= ' LIMIT '. (int) $limit;
+        }
+        if (null != $offset){
+            $sql.= ' OFFSET '. (int) $limit;
+        }
+        return $this->db->fetchColumn($sql, $binds);
+
+    }
 
     public function insert($model){
         $data = get_object_vars($model);

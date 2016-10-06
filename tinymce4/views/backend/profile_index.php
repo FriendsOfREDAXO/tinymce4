@@ -34,12 +34,20 @@ Die Tinymce-Init-Funktion wird wie folgt zusammen gesetzt:
 <pre>
 tinymce.init({
     file_browser_callback : redaxo5FileBrowser,
-    selector: '&lt;?php echo $profile-&gt;selector;?&gt;',
-    plugins: '&lt;?php echo $profile-&gt;plugins;?&gt;',
-    toolbar: '&lt;?php echo $profile-&gt;toolbar;?&gt;'
-    &lt;?php if ('' != $profile-&gt;initparams):?&gt;
-    ,&lt;?php echo $profile-&gt;initparams;?&gt;
+    selector: '&lt;?php echo $profile-&gt;selector;?&gt;'
+
+    &lt;?php if ('' != $profile-&gt;plugins):?&gt;
+        ,plugins: '&lt;?php echo $profile-&gt;plugins;?&gt;',
     &lt;?php endif;?&gt;
+
+    &lt;?php if ('' != $profile-&gt;toolbar):?&gt;
+        ,toolbar: '&lt;?php echo $profile-&gt;toolbar;?&gt;'
+    &lt;?php endif;?&gt;
+
+    &lt;?php if ('' != $profile-&gt;initparams):?&gt;
+        ,&lt;?php echo $profile-&gt;initparams;?&gt;
+    &lt;?php endif;?&gt;
+
 });
 </pre>
 Mit den weiteren Parametern (initparams) kann man die Funktion 

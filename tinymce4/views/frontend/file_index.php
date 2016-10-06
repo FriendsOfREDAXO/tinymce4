@@ -58,22 +58,8 @@
 <?php else: ?>
     <h6>Dateien:</h6>
 <?php endif;?>
-<?php if (0 == count($link_list)) :?>
-<div class="alert alert-info">
-    Keine gefunden 
-</div>
-<?php endif;?>
 
-<ul class="list-group">
-<?php foreach ($link_list as $link):?>
-<li class="list-group-item">
-<a href="" onclick="returnFile(this)"
-data-value="<?php echo $link['url']?>"
-><?php echo $link['name'];?></a><br/>
-</li>
-<?php endforeach;?>
-</ul>
-</div>
+<?php echo $list_content;?>
 
 <script type="text/javascript">
 var win = top.tinymce.activeEditor.windowManager.getParams().window;
@@ -92,6 +78,16 @@ function setType(){
 }
 function reload(){
     document.getElementById('category_selection').submit();
+    return false;
+}
+
+function loadMore(more_link){
+    var href = more_link.href;
+    more_link.innerHTML = '...';
+    more_link.onclick='return false;';
+    $.get(href, function(dat) {
+        $(more_link).replaceWith(dat);
+    });
     return false;
 }
 

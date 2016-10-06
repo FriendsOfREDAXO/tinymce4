@@ -25,20 +25,7 @@
 </div>
 </form>
 
-<?php if (0 == count($media_list)):?>
-<div class="alert alert-info">Keine gefunden</div>
-<?php endif;?>
-<?php foreach ($media_list as $medium):?>
-<div class="col-xs-3">
-<a style="cursor:pointer;width:80px;height:80px;display:inline-block;background-repeat:no-repeat;background-position:center center;background-image:url(
-    index.php?rex_media_type=rex_mediapool_preview&rex_media_file=<?php
-    echo urlencode($medium->filename);?>);" 
-    data-value="index.php?rex_media_type=tinymcewysiwyg&rex_media_file=<?php
-    echo urlencode($medium->filename);?>" 
-    title="<?php echo $medium->originalname;?> | <?php echo $medium->title;?>"
-    onclick="returnImage(this)" ></a>
-</div>
-<?php endforeach;?>
+<?php echo $list_content;?>
 
 <script type="text/javascript">
 var win = top.tinymce.activeEditor.windowManager.getParams().window;
@@ -53,6 +40,16 @@ function reload(){
     document.getElementById('category_selection').submit();
     return false;
 }
+function loadMore(more_link){
+    var href = more_link.href;
+    more_link.innerHTML = '...';
+    more_link.onclick='return false;';
+    $.get(href, function(dat) {
+        $(more_link).replaceWith(dat);
+    });
+    return false;
+}
+
 
 </script>
 <?php include 'bottom.php'; ?>
