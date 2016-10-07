@@ -1,3 +1,9 @@
+<div class="text-right">
+    <a class="btn btn-default btn-xs btn-warning"
+        href="<?php echo $UrlService->getUrl('/config/edit'); ?>"
+        ><?php echo $Translator->trans('Config', 'backend');?></a>
+<br/><br/>
+</div>
 <table class="table">
     <tr>
         <th>Selector</th>
