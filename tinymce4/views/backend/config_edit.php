@@ -1,0 +1,72 @@
+<form class="form"
+    action="<?php echo $UrlService->getUrl('/config/edit/'.$id);?>"
+    method="POST"
+    >
+<div class="text-right">
+    <button type="submit" 
+        class="btn btn-success btn-xs"
+        ><?php echo $Translator->trans('Save', 'backend');?></button>
+    <a class="btn btn-default btn-xs btn-warning"
+        href="<?php echo $UrlService->getUrl('/profile/index'); ?>"
+        ><?php echo $Translator->trans('Cancel', 'backend');?></a>
+<br/><br/>
+</div>
+
+<!-- content_css -->
+<div class="form-group<?php if(isset($errors['content_css'])):?> has-error<?php endif;?>">
+    <label for="attributes" class="control-label col-sm-2">
+        <?php echo $Translator->trans('content_css', 'backend');?>
+    </label>
+    <div class="col-sm-10">
+    <?php echo $form->text('model[content_css]', $model->content_css, array(
+        'class' => 'form-control',
+    ));?>
+    <?php if (isset($errors['content_css'])):?>
+        <div class="alert alert-danger"><?php echo $errors['content_css'];?></div>
+    <?php endif; ?>
+    <i>
+    URL zum Stylesheet (default: bootstrap)
+    </i>
+    </div>
+</div>
+    <br/>
+    <br/>
+<!-- image_format -->
+<div class="form-group<?php if(isset($errors['image_format'])):?> has-error<?php endif;?>">
+    <label for="attributes" class="control-label col-sm-2">
+        <?php echo $Translator->trans('image_format', 'backend');?>
+    </label>
+    <div class="col-sm-10">
+    <?php echo $form->text('model[image_format]', $model->image_format, array(
+        'class' => 'form-control',
+    ));?>
+    <?php if (isset($errors['image_format'])):?>
+        <div class="alert alert-danger"><?php echo $errors['image_format'];?></div>
+    <?php endif; ?>
+    <i>
+    default: index.php?rex_media_type=tinymcewysiwyg&rex_media_file={filename}<br/>
+    </i>
+    </div>
+</div>
+    <br/>
+    <br/>
+<!-- content_css -->
+<div class="form-group<?php if(isset($errors['media_format'])):?> has-error<?php endif;?>">
+    <label for="attributes" class="control-label col-sm-2">
+        <?php echo $Translator->trans('media_format', 'backend');?>
+    </label>
+    <div class="col-sm-10">
+    <?php echo $form->text('model[media_format]', $model->media_format, array(
+        'class' => 'form-control',
+    ));?>
+    <?php if (isset($errors['media_format'])):?>
+        <div class="alert alert-danger"><?php echo $errors['media_format'];?></div>
+    <?php endif; ?>
+    <i>
+    default: index.php?rex_media_type=tinymcewysiwyg&rex_media_file={filename}<br/>
+    </i>
+    </div>
+</div>
+    <br/>
+    <br/>
+</form>

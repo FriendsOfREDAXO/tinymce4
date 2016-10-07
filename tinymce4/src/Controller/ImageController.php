@@ -30,7 +30,7 @@ class ImageController
     public function listAction() {
         $filter = $this->container->get('FilterService');
         $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-        $limit  = isset($_GET['limit ']) ? intval($_GET['limit']) : 100;
+        $limit  = isset($_GET['limit ']) ? intval($_GET['limit']) : 20;
         $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
         $search = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
         $sql = "filetype IN ('image/png', 'image/jpeg', 'image/gif')";

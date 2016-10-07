@@ -12,5 +12,6 @@ if (rex::isBackend()) {
     $container->addRoute('/profile/index', '\Tinymce4\Controller\ProfileController:indexAction');
     $container->addRoute('/profile/edit', '\Tinymce4\Controller\ProfileController:editAction');
     $container->addRoute('/profile/remove', '\Tinymce4\Controller\ProfileController:removeAction');
+    $container->addRoute('/config/edit', '\Tinymce4\Controller\ConfigController:editAction');
 }
 

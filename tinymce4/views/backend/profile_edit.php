@@ -93,14 +93,15 @@
     <pre>
 table_class_list: [
     {title: 'None', value: ''},
-    {title: 'Dog', value: 'dog'},
-    {title: 'Cat', value: 'cat'}
+    {title: 'Table', value: 'table'},
+    {title: 'Table striped', value: 'table-striped'}
 ], 
 image_advtab: true,
 image_class_list: [
     {title: 'None', value: ''},
-    {title: 'Dog', value: 'dog'},
-    {title: 'Cat', value: 'cat'}
+    {title: 'Abgerundet', value: 'img-rounded'},
+    {title: 'Kreis', value: 'img-circle'}
+    {title: 'Responsive', value: 'img-responsive'}
 ]
     </pre>
     </i>

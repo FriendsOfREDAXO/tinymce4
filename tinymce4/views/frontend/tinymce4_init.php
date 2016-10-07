@@ -40,12 +40,18 @@ function redaxo5FileBrowser (field_name, url, type, win) {
 }
 
 
-$(document).on('ready pjax:success',function() {
-<?php foreach ($profiles as $profile):?>
+function tinymce4_init(){
+    <?php foreach ($profiles as $profile):?>
     tinymce.remove("<?php echo $profile->selector;?>");
     tinymce.init({
         file_browser_callback : redaxo5FileBrowser,
-        selector: '<?php echo $profile->selector;?>'
+    
+        selector: '<?php echo $profile->selector;?>',
+        <?php if (in_array(\rex_config::get('tinymce4', 'content_css'), ['default', ''])):?>
+            content_css: '<?php echo rex_url::addonAssets('tinymce4', 'bootstrap/css/bootstrap.min.css');?>'
+        <?php else: ?>  
+            content_css: '<?php echo \rex_config::get('tinymce4', 'content_css');?>'
+        <?php endif;?>
 
         <?php if ('' != $profile->plugins):?>
             ,plugins: '<?php echo $profile->plugins;?>'
@@ -59,6 +65,10 @@ $(document).on('ready pjax:success',function() {
             ,<?php echo $profile->initparams;?>
         <?php endif;?>
     });
-<?php endforeach;?>
+    <?php endforeach;?>
+}
+
+$(document).on('ready pjax:success',function() {
+    tinymce4_init();
 });
 
