@@ -12,7 +12,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
-if (rex::isBackend()) {
+if (rex::isBackend() && isset($_GET['page'])) {
     // Tinymce core
     rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce4/tinymce.min.js'));
     $user = \rex::getUser();
@@ -35,10 +35,12 @@ if (rex::isBackend()) {
     }
 }
 
-rex_extension::register('PACKAGES_INCLUDED', function($ep) {
-    if (isset($_GET['tinymce4_call'])) {
-        $service_container = Tinymce4\Services\ServiceContainer::getInstance();
-        echo $service_container->handleRoute($_GET['tinymce4_call']);
-        die();
-    }
-});
+if (isset($_GET['tinymce4_call'])) {
+    rex_extension::register('PACKAGES_INCLUDED', function($ep) {
+        if (isset($_GET['tinymce4_call'])) {
+            $service_container = Tinymce4\Services\ServiceContainer::getInstance();
+            echo $service_container->handleRoute($_GET['tinymce4_call']);
+            die();
+        }
+    });
+}

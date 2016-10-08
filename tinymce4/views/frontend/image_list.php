@@ -7,7 +7,7 @@
 <?php foreach ($media_list as $medium):?>
 <div class="col-xs-3">
 <a style="cursor:pointer;width:80px;height:80px;display:inline-block;background-repeat:no-repeat;background-position:center center;background-image:url(
-    index.php?rex_media_type=rex_mediapool_preview&rex_media_file=<?php
+    ../index.php?rex_media_type=rex_mediapool_preview&rex_media_file=<?php
     echo urlencode($medium->filename);?>);" 
     title="<?php echo $medium->originalname;?> | <?php echo $medium->title;?>"
     data-value="<?php
