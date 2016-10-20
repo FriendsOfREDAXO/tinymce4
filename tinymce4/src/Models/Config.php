@@ -28,7 +28,7 @@ class Config
             }
         }
     }
-    public function validate($container, $form, $field_list) {
+    public function validate($container) {
         $errors = array();
         
         
