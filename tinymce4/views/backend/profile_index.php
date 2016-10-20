@@ -1,9 +1,3 @@
-<div class="text-right">
-    <a class="btn btn-default btn-xs btn-warning"
-        href="<?php echo $UrlService->getUrl('/config/edit'); ?>"
-        ><?php echo $Translator->trans('Config', 'backend');?></a>
-<br/><br/>
-</div>
 <table class="table">
     <tr>
         <th>Selector</th>
@@ -13,7 +7,8 @@
         <th>
         <a class="btn btn-default"
             href="<?php echo $UrlService->getUrl('/profile/edit/0');?>"
-            >Hinzufügen</a>
+            title="<?php $Translator->trans('Add');?>"
+            ><i class="fa fa-plus" aria-hidden="true"></i></a>
         </th>
     </tr>
 <?php foreach ($profile_list as $key => $profile):?>
@@ -25,11 +20,11 @@
     <td>
         <a class="btn btn-default"
             href="<?php echo $UrlService->getUrl('/profile/edit/'.$profile->id);?>"
-            >Ändern</a>
+            ><i class="fa fa-pencil" aria-hidden="true"></i></a>
         <a class="btn btn-default"
             onclick="return confirm('Löschen?');"
             href="<?php echo $UrlService->getUrl('/profile/remove/'.$profile->id);?>"
-            >Löschen</a>
+            ><i class="fa fa-trash" aria-hidden="true"></i></a>
     </td>
     </tr>
 <?php endforeach;?>
@@ -40,7 +35,14 @@ Die Tinymce-Init-Funktion wird wie folgt zusammen gesetzt:
 <pre>
 tinymce.init({
     file_browser_callback : redaxo5FileBrowser,
+
     selector: '&lt;?php echo $profile-&gt;selector;?&gt;'
+
+    &lt;?php if (in_array(\rex_config::get('tinymce4', 'content_css'), ['default', ''])):?&gt;
+        content_css: '&lt;?php echo rex_url::addonAssets('tinymce4', 'bootstrap/css/bootstrap.min.css');?&gt;'
+    &lt;?php else: ?&gt;  
+        content_css: '&lt;?php echo \rex_config::get('tinymce4', 'content_css');?&gt;'
+    &lt;?php endif;?&gt;
 
     &lt;?php if ('' != $profile-&gt;plugins):?&gt;
         ,plugins: '&lt;?php echo $profile-&gt;plugins;?&gt;',
@@ -56,6 +58,7 @@ tinymce.init({
 
 });
 </pre>
-Mit den weiteren Parametern (initparams) kann man die Funktion 
-also beliebig erweitern.
+Man kann also plugins und toolbar leer lassen und mit den weiteren Parametern (initparams) den Tinymce-Editor komplett nach eigenen Vorstellungen konfigurieren.
+<br/>Hier findet man alle Informationen zur Konfiguration von Tinymce4: 
+<a href="https://www.tinymce.com/docs/configure/content-appearance/">Tinymce.com</a>
 </div>

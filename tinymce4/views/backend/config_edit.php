@@ -1,4 +1,4 @@
-<form class="form"
+<form class="form form-horizontal"
     action="<?php echo $UrlService->getUrl('/config/edit/'.$id);?>"
     method="POST"
     >
@@ -25,12 +25,11 @@
         <div class="alert alert-danger"><?php echo $errors['content_css'];?></div>
     <?php endif; ?>
     <i>
-    URL zum Stylesheet (default: bootstrap)
+    <?php echo $Translator->trans('content_css info', 'backend');?><br/>
+    default: bootstrap
     </i>
     </div>
 </div>
-    <br/>
-    <br/>
 <!-- image_format -->
 <div class="form-group<?php if(isset($errors['image_format'])):?> has-error<?php endif;?>">
     <label for="attributes" class="control-label col-sm-2">
@@ -44,6 +43,7 @@
         <div class="alert alert-danger"><?php echo $errors['image_format'];?></div>
     <?php endif; ?>
     <i>
+    <?php echo $Translator->trans('image_format info', 'backend');?><br/>
     default: index.php?rex_media_type=tinymcewysiwyg&rex_media_file={filename}<br/>
     </i>
     </div>
@@ -63,7 +63,8 @@
         <div class="alert alert-danger"><?php echo $errors['media_format'];?></div>
     <?php endif; ?>
     <i>
-    default: index.php?rex_media_type=tinymcewysiwyg&rex_media_file={filename}<br/>
+    <?php echo $Translator->trans('media_format info', 'backend');?><br/>
+    default: /media/{filename}<br/>
     </i>
     </div>
 </div>

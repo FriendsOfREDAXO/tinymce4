@@ -24,7 +24,7 @@ class Profile
             $this->initparams = trim($fs->filterText($data['initparams']));
         }
     }
-    public function validate($container, $form, $field_list) {
+    public function validate($container) {
         $errors = array();
         if ('' == trim($this->selector)) {
             $errors['selector'] = 'Input required';
