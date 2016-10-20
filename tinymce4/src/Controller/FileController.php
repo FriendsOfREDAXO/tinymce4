@@ -47,11 +47,17 @@ class FileController
         $clang_id = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
         $search = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
         if ('link' == $type) {
-            if (0 == $category_id) {
+            if (-1 == $category_id) {
+                // Alle
+                $sql = " clang_id=?";
+                $binds = array($clang_id);
+            }
+            elseif (0 == $category_id) {
                 $sql = "parent_id=? AND startarticle=? and clang_id=?";
                 $binds = array($category_id, 0, $clang_id);
 
-            } else {
+            } 
+            else {
                 $sql = "(
                        ( id=? AND startarticle=1)
                        OR

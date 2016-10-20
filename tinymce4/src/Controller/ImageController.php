@@ -55,13 +55,13 @@ class ImageController
             ->findWhere($sql, $binds, array('originalname'=>'ASC'), $limit, $offset);
         $total = $this->container->get('MediaRepository')
            ->countWhere($sql, $binds); 
-
         return $this->container->get('RenderService')->render(
             'frontend/image_list.php', array(
                 'media_list' => $media,
                 'UrlService' => $this->container->get('UrlService'),
                 'Translator' => $this->container->get('TranslatorService'),
-                'category_choices' => $this->container->get('MediaCategoryRepository')->getCategoryChoices(),
+                'category_choices' => $this->container->get('MediaCategoryRepository')
+                    ->getCategoryChoices(),
                 'form' => $this->container->get('FormService'),
                 'category_id' => $category_id,
                 'search' => $search,

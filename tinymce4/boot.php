@@ -15,6 +15,11 @@ spl_autoload_register(function ($class) {
 if (rex::isBackend() && isset($_GET['page'])) {
     // Tinymce core
     rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce4/tinymce.min.js'));
+
+    // css klappt noch nicht im Moment, weil Dialog und 
+    // Filemanager die gleichen Klassen verwenden, das Innere des Dialogs aber 
+    // nicht responsive ist.
+    //rex_view::addCssFile(rex_url::addonAssets('tinymce4', 'backend.css'));
     $user = \rex::getUser();
     if ($user) {
         $lang = $user->getLanguage();

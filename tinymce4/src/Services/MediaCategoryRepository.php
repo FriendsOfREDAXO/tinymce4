@@ -11,13 +11,38 @@ class MediaCategoryRepository extends Repository
 
     
     public function getCategoryChoices() {
-        $list = $this->findAll(array('name' => 'ASC'));
-        $a = array();
-        $a[0] = 'Alle';
+        $list = $this->findAll(array('path' => 'ASC', 'name' => 'ASC'));
+        $cat_idx = array();
         foreach ($list as $cat) {
-            $a[$cat->id] = $cat->name;
+            $cat_idx[$cat->parent_id][] = $cat;
         }
-        return $a;
+        $tree = array();
+        $tree[0] = 'Alle';
+
+        foreach ($list as $cat) {
+            if (0 != $cat->parent_id) continue;
+            $elements = $this->getSubTree($cat_idx, $cat);
+            foreach ($elements as $key=>$name) {
+                $tree[$key] = $name;
+            }
+
+        }
+        return $tree;
+    }
+
+    public function getSubTree($cat_idx, $cat) {
+        $tree = array();
+        $count = substr_count($cat->path, '|');
+        $tree[$cat->id] = str_repeat('-', $count-1).$cat->name;
+        if (isset($cat_idx[$cat->id])) {
+            foreach ( $cat_idx[$cat->id] as $subcat) {
+                $elements = $this->getSubTree($cat_idx, $subcat);
+                foreach ($elements as $key=>$name) {
+                    $tree[$key] = $name;
+                }
+            }
+        }
+        return $tree;
     }
 }
 
