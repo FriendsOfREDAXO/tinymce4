@@ -9,9 +9,9 @@
     echo urlencode($medium->filename);?>);" 
     data-value="<?php
     if (in_array(\rex_config::get('tinymce4', 'media_format'), ['default', ''])) {
-        echo 'index.php?rex_media_type=tinymcewysiwyg&rex_media_file='.urlencode($medium->filename);
+        echo '/media/'.urlencode($medium->filename);
     } else {
-        echo str_replace('{filename}', urlencode($medium->filename), \rex_config::get('tinymce4', 'image_format'));
+        echo str_replace('{filename}', urlencode($medium->filename), \rex_config::get('tinymce4', 'media_format'));
     }
     ?>" 
     title="<?php echo $medium->originalname;?> | <?php echo $medium->title;?>"

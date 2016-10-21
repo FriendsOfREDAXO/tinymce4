@@ -46,6 +46,7 @@ class FileController
         $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
         $clang_id = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
         $search = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
+        $media_format = \rex_config::get('tinymce4', 'media_format');
         if ('link' == $type) {
             if (-1 == $category_id) {
                 // Alle
@@ -110,7 +111,7 @@ class FileController
                     $name.= ' | '.$m->title;
                 }
                 $link_list[] = array(
-                    'url' => \rex_url::media($m->filename),
+                    'url' => 'default'==$media_format ? '/media/'.urlencode($m->filename) : str_replace('{filename}',urlencode($m->filename),$media_format),
                     'name' => $name,
                 );
             }
