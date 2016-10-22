@@ -39,10 +39,15 @@ function redaxo5FileBrowser (field_name, url, type, win) {
     return false;
 }
 
-
-function tinymce4_init(){
+function tinymce4_remove() {
     <?php foreach ($profiles as $profile):?>
-    tinymce.remove("<?php echo $profile->selector;?>");
+       tinymce.remove("<?php echo $profile->selector;?>");
+    <?php endforeach;?>
+}
+function tinymce4_init(){
+    // Erst instanzen, erforderlich für "Block übernehmen"
+    tinymce4_remove();
+    <?php foreach ($profiles as $profile):?>
     tinymce.init({
         file_browser_callback : redaxo5FileBrowser,
     
