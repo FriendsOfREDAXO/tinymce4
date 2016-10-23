@@ -1,5 +1,5 @@
 package: tinymce4
-version: '0.9.1'
+version: '0.9.3'
 author: 'Adrian Kühnis'
 requires:
     redaxo: ^5.1.0

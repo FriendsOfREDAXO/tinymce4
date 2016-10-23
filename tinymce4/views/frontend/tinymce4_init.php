@@ -40,10 +40,9 @@ function redaxo5FileBrowser (field_name, url, type, win) {
 }
 
 function tinymce4_remove() {
-    <?php foreach ($profiles as $profile):?>
-       tinymce.remove("<?php echo $profile->selector;?>");
-    <?php endforeach;?>
+    tinymce.remove();
 }
+
 function tinymce4_init(){
     // Erst instanzen, erforderlich für "Block übernehmen"
     tinymce4_remove();
