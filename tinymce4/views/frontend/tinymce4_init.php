@@ -74,5 +74,9 @@ function tinymce4_init(){
 
 $(document).on('ready pjax:success',function() {
     tinymce4_init();
+    if (typeof mblock_module === 'object') {
+        mblock_module.registerCallback('add_item_start', tinymce4_remove);
+        mblock_module.registerCallback('reindex_end', tinymce4_init);
+    }
 });
 
