@@ -95,7 +95,8 @@ image_class_list: [
     {title: 'Abgerundet', value: 'img-rounded'},
     {title: 'Kreis', value: 'img-circle'}
     {title: 'Responsive', value: 'img-responsive'}
-]
+],
+convert_urls: false
     </pre>
     </i>
     </div>
