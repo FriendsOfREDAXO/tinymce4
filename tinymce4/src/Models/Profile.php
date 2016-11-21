@@ -7,7 +7,7 @@ class Profile
     public $selector = '';
     public $plugins = '';
     public $toolbar = ''; 
-    public $init = ''; 
+    public $initparams = ''; 
     
     public function setFormData($data, $container) {
         $fs = $container->get('FilterService');
