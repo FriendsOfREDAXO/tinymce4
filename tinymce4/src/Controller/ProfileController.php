@@ -39,6 +39,7 @@ class ProfileController
                 } else {
                     $this->container->get('ProfileRepository')->update($model);
                 }
+                $this->container->get('ProfileRepository')->rebuildInitScripts();
 
                 $url = $this->container->get('UrlService')->getUrl('/profile/index');
                 header("Location: $url");

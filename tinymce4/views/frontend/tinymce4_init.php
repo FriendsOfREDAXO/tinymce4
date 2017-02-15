@@ -44,32 +44,12 @@ function tinymce4_remove() {
 }
 
 function tinymce4_init(){
-    // Erst instanzen, erforderlich für "Block übernehmen"
+    // Erst instanzen zerstören, erforderlich für "Block übernehmen"
     tinymce4_remove();
     <?php foreach ($profiles as $profile):?>
-    tinymce.init({
-        file_browser_callback : redaxo5FileBrowser,
-    
-        selector: '<?php echo $profile->selector;?>',
-        <?php if (in_array(\rex_config::get('tinymce4', 'content_css'), ['default', ''])):?>
-            content_css: '<?php echo rex_url::addonAssets('tinymce4', 'bootstrap/css/bootstrap.min.css');?>'
-        <?php else: ?>  
-            content_css: '<?php echo \rex_config::get('tinymce4', 'content_css');?>'
-        <?php endif;?>
-
-        <?php if ('' != $profile->plugins):?>
-            ,plugins: '<?php echo $profile->plugins;?>'
-        <?php endif;?>
-
-        <?php if ('' != $profile->toolbar):?>
-            ,toolbar: '<?php echo $profile->toolbar;?>'
-        <?php endif;?>
-
-        <?php if ('' != $profile->initparams):?>
-            ,<?php echo $profile->initparams;?>
-        <?php endif;?>
-    });
+        tinymce.init(<?php echo $profile->json;?>);
     <?php endforeach;?>
+    return false;
 }
 
 $(document).on('ready pjax:success',function() {

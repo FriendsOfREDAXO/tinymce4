@@ -12,24 +12,6 @@
 <br/><br/>
 </div>
 
-<!-- content_css -->
-<div class="form-group<?php if(isset($errors['content_css'])):?> has-error<?php endif;?>">
-    <label for="attributes" class="control-label col-sm-2">
-        <?php echo $Translator->trans('content_css', 'backend');?>
-    </label>
-    <div class="col-sm-10">
-    <?php echo $form->text('model[content_css]', $model->content_css, array(
-        'class' => 'form-control',
-    ));?>
-    <?php if (isset($errors['content_css'])):?>
-        <div class="alert alert-danger"><?php echo $errors['content_css'];?></div>
-    <?php endif; ?>
-    <i>
-    <?php echo $Translator->trans('content_css info', 'backend');?><br/>
-    default: bootstrap
-    </i>
-    </div>
-</div>
 <!-- image_format -->
 <div class="form-group<?php if(isset($errors['image_format'])):?> has-error<?php endif;?>">
     <label for="attributes" class="control-label col-sm-2">

@@ -4,6 +4,9 @@ namespace Tinymce4\Services;
 class ProfileRepository
 {
     public $container;
+    public function __construct($container) {
+        $this->container = $container;
+    }
 
     public function findAll() {
         $v = \rex_config::get('tinymce4', 'profiles');
@@ -76,6 +79,20 @@ class ProfileRepository
         $obj = new \Tinymce4\Models\Profile();
         $obj->hydrate($data, $this->container);
         return $obj;
+    }
+
+    public function rebuildInitScripts(){
+        $profiles = $this->findAll();
+        $langmap = $this->container->getParameter('be_lang_map');
+        foreach ($langmap as $lang_pack) {
+            $js =  $this->container->get('RenderService')->render(
+                'frontend/tinymce4_init.php', array(
+                    'lang_pack' => $lang_pack,
+                    'profiles' => $this->container->get('ProfileRepository')->findAll(),
+                ));
+            $filename = \rex_path::addonAssets('tinymce4', 'tinymce4_init.'.$lang_pack.'.js');
+            file_put_contents($filename, $js);
+        }
     }
 }
 

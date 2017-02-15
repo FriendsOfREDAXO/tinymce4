@@ -13,94 +13,35 @@
 <br/>
 </div>
 
-<!-- selector -->
-<div class="form-group<?php if(isset($errors['selector'])):?> has-error<?php endif;?>">
+<!-- name -->
+<div class="form-group<?php if(isset($errors['name'])):?> has-error<?php endif;?>">
     <label for="attributes" class="control-label col-sm-2">
-        <?php echo $Translator->trans('selector', 'backend');?>
+        <?php echo $Translator->trans('name', 'backend');?>
     </label>
     <div class="col-sm-10">
-    <?php echo $form->text('model[selector]', $model->selector, array(
+    <?php echo $form->text('model[name]', $model->name, array(
         'class' => 'form-control',
     ));?>
-    <?php if (isset($errors['selector'])):?>
-        <div class="alert alert-danger"><?php echo $Translator->trans($errors['selector'], 'backend');?></div>
+    <?php if (isset($errors['name'])):?>
+        <div class="alert alert-danger"><?php echo $Translator->trans($errors['name'], 'backend');?></div>
     <?php endif; ?>
-    <i>
-    Beispiel: textarea.tinyMCEEditor
-    </i>
     </div>
 </div>
 
 <!-- plugins -->
-<div class="form-group<?php if(isset($errors['plugins'])):?> has-error<?php endif;?>">
+<div class="form-group<?php if(isset($errors['json'])):?> has-error<?php endif;?>">
     <label for="attributes" class="control-label col-sm-2">
-        <?php echo $Translator->trans('plugins', 'backend');?>
+        <?php echo $Translator->trans('json', 'backend');?>
     </label>
     <div class="col-sm-10">
-    <?php echo $form->textarea('model[plugins]', $model->plugins, array(
+    <?php echo $form->textarea('model[json]', $model->json, array(
         'class' => 'form-control',
-        'rows' => 5,
+        'rows' => 20,
     ));?>
-    <?php if (isset($errors['plugins'])):?>
-        <div class="alert alert-danger"><?php echo $Translator->trans( $errors['plugins'],'backend');?></div>
+    <?php if (isset($errors['json'])):?>
+        <div class="alert alert-danger"><?php echo $Translator->trans( $errors['json'],'backend');?></div>
     <?php endif; ?>
-    <i>
-    Beispiel: advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table contextmenu paste code
-    </i>
     </div>
 </div>
 
-<!-- toolbar -->
-<div class="form-group<?php if(isset($errors['toolbar'])):?> has-error<?php endif;?>">
-    <label for="attributes" class="control-label col-sm-2">
-        <?php echo $Translator->trans('toolbar', 'backend');?>
-    </label>
-    <div class="col-sm-10">
-    <?php echo $form->textarea('model[toolbar]', $model->toolbar, array(
-        'class' => 'form-control',
-        'rows' => 5,
-    ));?>
-    <?php if (isset($errors['toolbar'])):?>
-        <div class="alert alert-danger"><?php echo $Translator->trans( $errors['toolbar'], 'backend');?></div>
-    <?php endif; ?>
-    <i>
-    Beispiel: insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image
-    </i>
-    </div>
-</div>
-<!-- initparams -->
-<div class="form-group<?php if(isset($errors['initparams'])):?> has-error<?php endif;?>">
-    <label for="attributes" class="control-label col-sm-2">
-        <?php echo $Translator->trans('initparams', 'backend');?>
-    </label>
-    <div class="col-sm-10">
-    <?php echo $form->textarea('model[initparams]', $model->initparams, array(
-        'class' => 'form-control',
-        'rows' => 5,
-    ));?>
-    <?php if (isset($errors['initparams'])):?>
-        <div class="alert alert-danger"><?php echo $Translator->trans( $errors['initparams'], 'backend');?></div>
-    <?php endif; ?>
-    <i>
-    Beispiel (KEIN Komma nach dem letzten Eintrag!): 
-    <pre>
-table_class_list: [
-    {title: 'None', value: ''},
-    {title: 'Table', value: 'table'},
-    {title: 'Table striped', value: 'table-striped'}
-], 
-image_advtab: true,
-image_class_list: [
-    {title: 'None', value: ''},
-    {title: 'Abgerundet', value: 'img-rounded'},
-    {title: 'Kreis', value: 'img-circle'}
-    {title: 'Responsive', value: 'img-responsive'}
-],
-convert_urls: false
-    </pre>
-    </i>
-    </div>
-    <br/>
-    <br/>
-</div>
 </form>

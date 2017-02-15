@@ -4,39 +4,48 @@ namespace Tinymce4\Models;
 class Profile
 {
     public $id = 0;
-    public $selector = '';
-    public $plugins = '';
-    public $toolbar = ''; 
-    public $initparams = ''; 
+    public $name = '';
+    public $json = '';
+
+    public function __construct(){
+        $content_css = \rex_url::addonAssets('tinymce4', 'bootstrap/css/bootstrap.min.css');
+        $this->json = "{
+            selector: 'textarea.tinyMCEEditor',
+            file_browser_callback: redaxo5FileBrowser,
+            plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table contextmenu paste code',
+            toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            convert_urls: false,
+            content_css: '$content_css',
+            }";
+    }
     
     public function setFormData($data, $container) {
         $fs = $container->get('FilterService');
-        if (isset($data['selector'])){
-            $this->selector = trim($fs->filterString($data['selector']));
+        if (isset($data['name'])){
+            $this->name = trim($fs->filterString($data['name']));
         }
-        if (isset($data['plugins'])){
-            $this->plugins = trim($fs->filterString($data['plugins']));
-        }
-        if (isset($data['toolbar'])){
-            $this->toolbar = trim($fs->filterString($data['toolbar']));
-        }
-        if (isset($data['initparams'])){
-            $this->initparams = trim($fs->filterText($data['initparams']));
+        if (isset($data['json'])){
+            $this->json = trim($fs->filterText($data['json']));
         }
     }
     public function validate($container) {
         $errors = array();
-        if ('' == trim($this->selector)) {
-            $errors['selector'] = 'Input required';
+        if ('' == trim($this->name)) {
+            $errors['name'] = 'Input required';
         }
-        if ('' != $this->initparams) {
-            if (',' == substr($this->initparams, -1)) {
-                $errors['initparams'] = 'Komma am Ende weglassen';
-            }
-            if (',' == substr($this->initparams, 0, 1)) {
-                $errors['initparams'] = 'Komma am Anfang weglassen';
-            }
+        if ('' == $this->json) {
+            $errors['json'] = 'Input required';
         }
+        // kann so nicht gehen, weil das json javascript-Funktionen enthalten kann
+        // Muss bei der Eingabe geprüft werden
+        /*
+        else{
+            $decoded = json_decode($this->json);
+            if (null === $decoded) {
+                $errors['json'] = 'Json not valid';
+            } 
+        }
+         */
         
         return $errors;
     }
@@ -46,18 +55,13 @@ class Profile
         if (isset($data['id'])){
             $this->id = intval($data['id']);
         }
-        if (isset($data['selector'])){
-            $this->selector = $data['selector'];
+        if (isset($data['name'])){
+            $this->name = $data['name'];
         }
-        if (isset($data['plugins'])){
-            $this->plugins = $data['plugins'];
-        }
-        if (isset($data['toolbar'])){
-            $this->toolbar = $data['toolbar'];
-        }
-        if (isset($data['initparams'])){
-            $this->initparams = $data['initparams'];
+        if (isset($data['json'])){
+            $this->json = $data['json'];
         }
     }
     
 }
+

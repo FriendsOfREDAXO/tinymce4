@@ -17,4 +17,6 @@ return array(
     'initparams' => 'Weitere Parameter',
     'plugins' => 'Plugins',
     'Input required' => 'Eingabe erforderlich',
+    'json' => 'Tinymce Config',
+    'name' => 'Bezeichnung',
     );
