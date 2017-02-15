@@ -12,7 +12,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
-if (rex::isBackend() && isset($_GET['page'])) {
+if (rex::isBackend() && isset($_GET['page']) && !isset($_GET['_pjax'])) {
     // Tinymce core
     rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce4/tinymce.min.js'));
 
@@ -35,8 +35,14 @@ if (rex::isBackend() && isset($_GET['page'])) {
         } 
         // Tinymce Übersetzungen laden
         rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce4/langs/'.$lang_pack.'.js'));
-        rex_view::addJsFile('index.php?tinymce4_call=/asset_js/'.urlencode(
-            'tinymce4_init.'.$lang_pack.'.js'));
+        // Tinymce init script
+        rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce4_init.'.$lang_pack.'.js'));
+        
+        // Wenn Tinymce neu installiert wurde, gibt es die Datei noch nicht
+        $filename = \rex_path::addonAssets('tinymce4', 'tinymce4_init.'.$lang_pack.'.js');
+        if (!file_exists($filename)) {
+            $service_container->get('ProfileRepository')->rebuildInitScripts();
+        }
     }
 }
 
