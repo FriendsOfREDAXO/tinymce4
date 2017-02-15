@@ -11,4 +11,19 @@ im Profil unter "weitere Parameter" hinzugefügt werden.
 
 Weitere Infos zum Thema: https://www.tinymce.com/docs/configure/url-handling/
 
+## Bootstrap-Tabellenlayout
 
+```
+table_class_list: [
+    {title: 'None', value: ''},
+    {title: 'Table', value: 'table'},
+    {title: 'Table striped', value: 'table-striped'}
+], 
+image_advtab: true,
+image_class_list: [
+    {title: 'None', value: ''},
+    {title: 'Abgerundet', value: 'img-rounded'},
+    {title: 'Kreis', value: 'img-circle'}
+    {title: 'Responsive', value: 'img-responsive'}
+]
+```
