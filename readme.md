@@ -13,7 +13,7 @@ content_css: '/assets/addons/tinymce4/bootstrap/css/bootstrap.min.css',
 ```
 
 Wichtig: **redaxo5FileBrowser** ist eine Funktion. Darum werden an dieser Stelle
-keine Quotes verwendet. 
+**keine Quotes** verwendet. 
 
 ## Empfehlungen
 
