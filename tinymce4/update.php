@@ -41,7 +41,7 @@ if(null === rex_config::get('tinymce4', 'profiles')){
             'name' => 'Profile '.($i+1),
             'json' => "{
                 selector: '{$profile['selector']}',
-                file_browser_callback: 'redaxo5FileBrowser',
+                file_browser_callback: redaxo5FileBrowser,
                 convert_urls: false,
                 content_css: '$content_css',
                 plugins: '{$profile['plugins']}',
