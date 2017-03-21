@@ -29,6 +29,12 @@
 
         $fragment = new rex_fragment();
 	$fragment->setVar('class', 'info', false);
+	$fragment->setVar('title', 'Modul installieren', false); //todo
+	$fragment->setVar('body', '<a  href="'.rex_url::backend('index.php').'?page=tinymce4&r=/config/createmodule">Ein Beispiel-Modul installieren</a>', false);
+	echo $fragment->parse('core/page/section.php');
+	
+        $fragment = new rex_fragment();
+	$fragment->setVar('class', 'info', false);
 	$fragment->setVar('title', 'Weitere Infos', false); //todo
 	$fragment->setVar('body', '<a target="_blank" href="https://github.com/akuehnis/redaxo5_addon_tinymce4">https://github.com/akuehnis/redaxo5_addon_tinymce4</a>', false);
 	echo $fragment->parse('core/page/section.php');

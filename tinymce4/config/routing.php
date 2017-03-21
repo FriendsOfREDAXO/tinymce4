@@ -11,5 +11,7 @@ if (rex::isBackend() && null !== rex::getUser()) {
     $container->addRoute('/profile/edit', '\Tinymce4\Controller\ProfileController:editAction');
     $container->addRoute('/profile/remove', '\Tinymce4\Controller\ProfileController:removeAction');
     $container->addRoute('/config/edit', '\Tinymce4\Controller\ConfigController:editAction');
+    $container->addRoute('/config/help', '\Tinymce4\Controller\ConfigController:helpAction');
+    $container->addRoute('/config/createmodule', '\Tinymce4\Controller\ConfigController:createModuleAction');
 }
 

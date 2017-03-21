@@ -19,10 +19,10 @@ class ProfileController
                 'UrlService' => $this->container->get('UrlService'),
                 'Translator' => $this->container->get('TranslatorService'),
                 'form' => $this->container->get('FormService'),
-                'clang_id' => $clang_id,
             ));
     }
     public function editAction($id) {
+        $errors = array();
         $model = $this->container->get('ProfileRepository')->find($id);
         if (null === $model) {
             $id = 0;
