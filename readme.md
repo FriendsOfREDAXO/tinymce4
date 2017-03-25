@@ -22,11 +22,13 @@ Wichtig: **redaxo5FileBrowser** ist eine Funktion. Darum werden an dieser Stelle
 Wenn convert_urls: true ist, dann verändert Tinymce eingegebene URL's beim speichern.
 Zum Beispiel wird eine URL /media/xxx in ../media/xxx umgewandelt. 
 Dies ist meistens nicht gewünscht, daher sollte convert_urls: false 
-im Profil unter "weitere Parameter" hinzugefügt werden.
+im Profil enthalten sein (beim Default-Profil ist das schon drin).
 
 Weitere Infos zum Thema: https://www.tinymce.com/docs/configure/url-handling/
 
 ### Bootstrap-Tabellenlayout im edit
+
+Damit die Bootstrap-Tabellenklassen rsp. auch die Bootstrap-Bilder-Klassen im Editor verfügbar sind, kann das folgende Snippet dem Profil hinzu gefügt werden:
 
 ```
 table_class_list: [
