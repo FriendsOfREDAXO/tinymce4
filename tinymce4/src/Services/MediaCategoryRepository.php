@@ -5,10 +5,14 @@ use Tinymce4\Classes\Repository;
 class MediaCategoryRepository extends Repository
 {
     public $container;
-    public $table = 'rex_media_category';
+    public $table = '';
     public $primary = 'id';
     public $model = '\Tinymce4\Models\MediaCategory';
 
+    public function __construct($container) {
+        parent::__construct($container);
+        $this->table = \rex::getTablePrefix().'media_category';
+    }
     
     public function getCategoryChoices() {
         $list = $this->findAll(array('path' => 'ASC', 'name' => 'ASC'));

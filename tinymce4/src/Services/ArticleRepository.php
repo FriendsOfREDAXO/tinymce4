@@ -5,9 +5,14 @@ use Tinymce4\Classes\Repository;
 class ArticleRepository extends Repository
 {
     public $container;
-    public $table = 'rex_article';
+    public $table = '';
     public $primary = 'pid';
     public $model = '\Tinymce4\Models\Article';
+
+    public function __construct($container) {
+        parent::__construct($container);
+        $this->table = \rex::getTablePrefix().'article';
+    }
 
     public function getCategoryChoices($clang_id) {
         
