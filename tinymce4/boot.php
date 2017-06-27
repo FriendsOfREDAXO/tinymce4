@@ -14,7 +14,7 @@ spl_autoload_register(function ($class) {
 
 if (rex::isBackend() && isset($_REQUEST['page']) && !isset($_REQUEST['_pjax'])) {
     // Tinymce core
-    rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce4/tinymce.min.js'));
+    rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'));
 
     // css klappt noch nicht im Moment, weil Dialog und 
     // Filemanager die gleichen Klassen verwenden, das Innere des Dialogs aber 
@@ -34,7 +34,7 @@ if (rex::isBackend() && isset($_REQUEST['page']) && !isset($_REQUEST['_pjax'])) 
             $lang_pack = $map[$lang];
         } 
         // Tinymce Übersetzungen laden
-        rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce4/langs/'.$lang_pack.'.js'));
+        rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/langs/'.$lang_pack.'.js'));
         // Tinymce init script
         rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce4_init.'.$lang_pack.'.js'));
         
