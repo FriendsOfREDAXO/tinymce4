@@ -130,7 +130,7 @@ class Repository {
             $sql.= ' LIMIT '. (int) $limit;
         }
         if (null != $offset){
-            $sql.= ' OFFSET '. (int) $limit;
+            $sql.= ' OFFSET '. (int) $offset;
         }
         $aData  = $this->db->fetchAll($sql, $binds);
         if(!$aData){
