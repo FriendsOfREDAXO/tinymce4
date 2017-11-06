@@ -1,6 +1,12 @@
 .mce-content-body { 
-    padding: 5px;
+    padding-top: 15px;
+    background-color: #f3f6fb;
+    background-image: none;
+    border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 }
+
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.

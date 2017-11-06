@@ -1,17 +1,28 @@
+<?php
+
+$types = array('link' => 'Seite', 'media' => 'Datei');
+$profile_data = $profile ? $profile->decode() : [];
+
+if (isset($profile_data['tables'])) {
+    $types['table'] = 'Tabelle';
+}
+
+?>
 <?php include 'top.php'; ?>
 <div class="col-xs-12">
-<form 
+<form
     class="form"
-    method="GET" 
+    method="GET"
     action="index.php"
     id="category_selection"
 >
 <input type="hidden" name="tinymce4_call" value="/file/index" />
+<input type="hidden" name="mce_profile" value="<?= $profile->id ?>" />
 <div class="row">
     <div class="col-xs-6">
         <label>Link-Typ</label>
         <div class="form-group">
-        <?php echo $form->select('type', array('link' => 'Seite', 'media' => 'Datei'),
+        <?php echo $form->select('type', $types,
             $type, array(
                 'onchange' => 'setType()',
                 'class' => 'form-control',
@@ -19,7 +30,7 @@
         </div>
     </div>
     <div class="col-xs-6">
-        <?php if ('link' == $type):?>
+        <?php if ('link' == $type || $type == 'table'):?>
             <div class="form-group">
             <label>Sprache</label>
             <?php echo $form->select('clang_id', $language_choices, $clang_id, array(
@@ -34,14 +45,18 @@
 </div>
 
 <div class="form-group">
-<label>Kategorie</label>
+<?php if ('table' == $type): ?>
+    <label>Tabelle</label>
+<?php else: ?>
+    <label>Kategorie</label>
+<?php endif; ?>
 <?php echo $form->select('category_id', $category_choices, $category_id, array(
     'onchange' => 'reload()',
         'class' => 'form-control',
 ));?>
 </div>
 
-<?php if ('media' == $type):?>
+<?php if ('media' == $type || 'table' == $type):?>
     <div class="form-group">
     <?php echo $form->text('search', $search, array(
         'onchange' => 'reload()',
@@ -55,6 +70,8 @@
 </form>
 <?php if ('link' == $type):?>
     <h6>Seiten:</h6>
+<?php elseif ('table' == $type): ?>
+    <h6>Datensätze:</h6>
 <?php else: ?>
     <h6>Dateien:</h6>
 <?php endif;?>

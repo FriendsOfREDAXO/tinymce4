@@ -1,11 +1,18 @@
 function redaxo5FileBrowser (field_name, url, type, win) {
-     console.log("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
+    console.debug({
+        field_name: field_name,
+        url: url,
+        type: type,
+        win: win
+    }); // debug/testing
+    // console.debug(tinymce.activeEditor);
+    // console.debug(tinymce);
 
     /* If you work with sessions in PHP and your client doesn't accept cookies you might need to carry
        the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
        These lines of code extract the necessary parameters and add them back to the filebrowser URL again. */
 
-    var cmsURL = 'index.php?tinymce4_call=';    // script URL - use an absolute path!
+    var cmsURL = 'index.php?mce_profile='+ tinymce.activeEditor.profile +'&tinymce4_call=';    // script URL - use an absolute path!
     if ('image' == type) {
         cmsURL+= '/image/index';
         var browser_name = 'Bild auswählen';
@@ -46,8 +53,12 @@ function tinymce4_remove() {
 function tinymce4_init(){
     // Erst instanzen zerstören, erforderlich für "Block übernehmen"
     tinymce4_remove();
-    <?php foreach ($profiles as $profile):?>
-        tinymce.init(<?php echo $profile->json;?>);
+    <?php foreach ($profiles as $profile): ?>
+        var profile = <?= $profile->json ?>;
+        profile.setup = function(editor) {
+            editor.profile = '<?= $profile->id ?>';
+        };
+        tinymce.init(profile);
     <?php endforeach;?>
     return false;
 }

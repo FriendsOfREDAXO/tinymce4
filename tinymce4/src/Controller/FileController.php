@@ -1,27 +1,63 @@
 <?php
 namespace Tinymce4\Controller;
 
-class FileController 
+use Tinymce4\Services\ProfileRepository;
+
+class FileController
 {
     public $container;
+    protected $tables;
 
     public function __construct($container) {
-        $this->container = $container; 
+        $this->container = $container;
     }
     public function indexAction() {
+        $Repository = new ProfileRepository();
         $filter = $this->container->get('FilterService');
         $type = isset($_GET['type']) ? $_GET['type'] : 'link';
-        $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
+        $category_id = rex_get('category_id', 'int', 0);
         $clang_id = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
+        $this->profile = $Repository->find(rex_get('mce_profile', 'string'));
         $search = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
-        $list_content = $this->listAction();
-        if ('link' == $type) {
+
+        if ('table' == $type) {
+            $category_choices = [];
+
+            if ($this->profile) {
+                $profile_data = $this->profile->decode();
+
+                if (strlen($profile_data['tables'])) {
+                    $this->tables = [];
+                    preg_match_all('@(\w+)(\[(\w+:[\s\w+=><!\d]+,?)+\]),?@i', trim(trim(strtr($profile_data['tables'], [
+                        '{{CLANG_CURRENT_ID}}' => \rex_clang::getCurrentId(),
+                    ]), "'"), '"'), $matches);
+
+                    foreach ($matches[1] as $index => $tablename) {
+                        $ytable = \rex_yform_manager_table::get($tablename);
+                        $category_choices[$index] = $ytable ? $ytable->getName() : $tablename;
+
+                        $data = ['tablename' => $tablename];
+                        $_data = explode(',', trim(trim($matches[2][$index], ']'), '['));
+
+                        foreach ($_data as $row) {
+                            list($key, $values) = explode(':', $row);
+                            $data[$key] = array_filter(explode('+', $values));
+                        }
+                        $this->tables[$index] = array_filter($data);
+                    }
+                }
+            }
+        }
+        else if ('link' == $type) {
             $category_choices = $this->container->get('ArticleRepository')
-                    ->getCategoryChoices($clang_id);
+                ->getCategoryChoices($clang_id);
         } else {
             $category_choices = $this->container->get('MediaCategoryRepository')
                 ->getCategoryChoices();
         }
+
+        $list_content = $this->listAction();
+
         return $this->container->get('RenderService')->render(
             'frontend/file_index.php', array(
                 'list_content' => $list_content,
@@ -33,6 +69,7 @@ class FileController
                 'category_choices' => $category_choices,
                 'language_choices' => $this->container->get('LanguageService')->getLanguageChoices(),
                 'clang_id' => $clang_id,
+                'profile' => $this->profile,
                 'search' => $search,
             ));
 
@@ -43,7 +80,7 @@ class FileController
         $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
         $limit  = isset($_GET['limit ']) ? intval($_GET['limit']) : 100;
         $type = isset($_GET['type']) ? $_GET['type'] : 'link';
-        $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
+        $category_id = rex_get('category_id', 'int', 0);
         $clang_id = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
         $search = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
         $media_format = \rex_config::get('tinymce4', 'media_format');
@@ -57,7 +94,7 @@ class FileController
                 $sql = "parent_id=? AND startarticle=? and clang_id=?";
                 $binds = array($category_id, 0, $clang_id);
 
-            } 
+            }
             else {
                 $sql = "(
                        ( id=? AND startarticle=1)
@@ -115,9 +152,32 @@ class FileController
                     'name' => $name,
                 );
             }
+        } elseif ('table' == $type) {
+            if (count($this->tables)) {
+                $table = $this->tables[$category_id] ?: $this->tables[0];
+                $where = array_merge([1], (array) $table['filter']);
+                $order = strlen($table['order'][0]) ? $table['order'][0] : $table['fields'][0] .' ASC';
 
+                if (strlen($search)) {
+                    $where[] = implode(" LIKE '%{$search}%' OR ", $table['fields']) ." LIKE '%{$search}%'";
+                }
+
+                $sql = \rex_sql::factory();
+                $query = "
+                    SELECT 
+                        id, 
+                        CONCAT('table://{$table['tablename']}-', id, '-{$clang_id}') AS url, 
+                        CONCAT(". implode('," | ",', $table['fields']) .") AS name 
+                    FROM {$table['tablename']}
+                    WHERE ". implode(' AND ', $where) ."
+                    ORDER BY {$order}
+                ";
+                echo "<!-- Table-Data: ". print_r($table, true) ." -->";
+                echo "<!-- Table-Query: {$query} -->";
+                $link_list = $sql->getArray($query);
+            }
         }
-        
+
         return $this->container->get('RenderService')->render(
             'frontend/file_list.php', array(
                 'link_list' => $link_list,
@@ -131,10 +191,10 @@ class FileController
                 'total' => $total,
                 'offset' => $offset,
                 'limit' => $limit,
-                
+
             ));
     }
-    
+
 }
 
 

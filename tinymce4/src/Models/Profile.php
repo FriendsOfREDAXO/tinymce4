@@ -18,7 +18,7 @@ class Profile
             content_css: '$content_css'
             }";
     }
-    
+
     public function setFormData($data, $container) {
         $fs = $container->get('FilterService');
         if (isset($data['name'])){
@@ -46,8 +46,21 @@ class Profile
             } 
         }
          */
-        
+
         return $errors;
+    }
+
+    public function decode() {
+        $data = [];
+        $rows = explode("\n", strtr(trim(trim(trim($this->json, '{'), '}')), ["\t" => '']));
+
+        foreach ($rows as $row) {
+            $row = trim($row);
+            $key = substr($row, 0, strpos($row, ':'));
+            $value = substr($row, strpos($row, ':') + 1);
+            $data[$key] = $value;
+        }
+        return $data;
     }
 
     // Gibt die Daten mit dem Label zurück
@@ -62,6 +75,6 @@ class Profile
             $this->json = $data['json'];
         }
     }
-    
+
 }
 
