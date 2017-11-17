@@ -12,7 +12,7 @@ class FileController
         $this->container = $container;
     }
     public function indexAction() {
-        $Repository = new ProfileRepository();
+        $Repository = new ProfileRepository($this->container);
         $filter = $this->container->get('FilterService');
         $type = isset($_GET['type']) ? $_GET['type'] : 'link';
         $category_id = rex_get('category_id', 'int', 0);
