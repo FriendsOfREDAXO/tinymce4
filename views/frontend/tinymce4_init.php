@@ -51,23 +51,35 @@ function tinymce4_remove() {
 }
 
 function tinymce4_init(){
-    // Erst instanzen zerstören, erforderlich für "Block übernehmen"
-    tinymce4_remove();
     <?php foreach ($profiles as $profile): ?>
         var profile = <?= $profile->json ?>;
+        profile.selector += ':not(.mce-initialized)';
+
         profile.setup = function(editor) {
             editor.profile = '<?= $profile->id ?>';
         };
-        tinymce.init(profile);
+        tinymce.init(profile).then(function(editors) {
+            for(var i in editors) {
+                console.debug(editors[i].id);
+                $(editors[i].targetElm).addClass('mce-initialized');
+            }
+        });
     <?php endforeach;?>
     return false;
 }
 
 $(document).on('ready pjax:success',function() {
+    // Erst instanzen zerstören, erforderlich für "Block übernehmen"
+    tinymce4_remove();
     tinymce4_init();
+
     if (typeof mblock_module === 'object') {
         mblock_module.registerCallback('add_item_start', tinymce4_remove);
         mblock_module.registerCallback('reindex_end', tinymce4_init);
     }
+});
+
+$(document).on('be_table:row-added',function() {
+    tinymce4_init();
 });
 
