@@ -60,7 +60,6 @@ function tinymce4_init(){
         };
         tinymce.init(profile).then(function(editors) {
             for(var i in editors) {
-                console.debug(editors[i].id);
                 $(editors[i].targetElm).addClass('mce-initialized');
             }
         });
