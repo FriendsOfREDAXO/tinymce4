@@ -47,6 +47,7 @@ function redaxo5FileBrowser (field_name, url, type, win) {
 }
 
 function tinymce4_remove() {
+    $('.mce-initialized').removeClass('mce-initialized');
     tinymce.remove();
 }
 
@@ -69,8 +70,10 @@ function tinymce4_init(){
 
 $(document).on('ready pjax:success',function() {
     // Erst instanzen zerstören, erforderlich für "Block übernehmen"
-    tinymce4_remove();
-    tinymce4_init();
+    window.setTimeout(function() {
+        tinymce4_remove();
+        tinymce4_init();
+    }, 100);
 
     if (typeof mblock_module === 'object') {
         mblock_module.registerCallback('add_item_start', tinymce4_remove);
