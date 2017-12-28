@@ -1,10 +1,4 @@
 function redaxo5FileBrowser (field_name, url, type, win) {
-    console.debug({
-        field_name: field_name,
-        url: url,
-        type: type,
-        win: win
-    }); // debug/testing
     // console.debug(tinymce.activeEditor);
     // console.debug(tinymce);
 
@@ -75,9 +69,16 @@ $(document).on('ready pjax:success',function() {
         tinymce4_init();
     }, 100);
 
-    if (typeof mblock_module === 'object') {
-        mblock_module.registerCallback('add_item_start', tinymce4_remove);
-        mblock_module.registerCallback('reindex_end', tinymce4_init);
+    if (typeof mblock_module === 'object' && !document.tinymce_mblock_initialized) {
+        document.tinymce_mblock_initialized = true;
+
+        mblock_module.registerCallback('reindex_end', function() {
+            if (mblock_module.lastAction == 'add_item') {
+                mblock_module.affectedItem.find('.mce-initialized').removeClass('mce-initialized').show();
+                mblock_module.affectedItem.find('.mce-tinymce.mce-container').remove();
+                tinymce4_init();
+            }
+        });
     }
 });
 
