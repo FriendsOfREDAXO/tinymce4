@@ -40,7 +40,7 @@ image_advtab: true,
 image_class_list: [
     {title: 'None', value: ''},
     {title: 'Abgerundet', value: 'img-rounded'},
-    {title: 'Kreis', value: 'img-circle'}
+    {title: 'Kreis', value: 'img-circle'},
     {title: 'Responsive', value: 'img-responsive'}
 ]
 ```
