@@ -8,32 +8,23 @@ class FileController
     public function __construct($container) {
         $this->container = $container; 
     }
+    public function testAction(){
+    }
     public function indexAction() {
-        $filter = $this->container->get('FilterService');
-        $type = isset($_GET['type']) ? $_GET['type'] : 'link';
-        $category_id = isset($_GET['category_id']) ? intval($_GET['category_id']) : 0;
         $clang_id = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
-        $search = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
-        $list_content = $this->listAction();
-        if ('link' == $type) {
-            $category_choices = $this->container->get('ArticleRepository')
-                    ->getCategoryChoices($clang_id);
-        } else {
-            $category_choices = $this->container->get('MediaCategoryRepository')
-                ->getCategoryChoices();
-        }
+        $db = \rex_sql::factory();
+        $sql = "SELECT * FROM ".\rex::getTable('article')." WHERE clang_id=$clang_id";
+        $all_arts = $db->getArray($sql);
+        $sql =  "SELECT * FROM ".\rex::getTable('media')." WHERE 1";
+        $all_files = $db->getArray($sql);
+        $sql =  "SELECT * FROM ".\rex::getTable('media_category')." WHERE 1";
+        $all_media_categories = $db->getArray($sql);
         return $this->container->get('RenderService')->render(
             'frontend/file_index.php', array(
-                'list_content' => $list_content,
-                'UrlService' => $this->container->get('UrlService'),
-                'Translator' => $this->container->get('TranslatorService'),
-                'form' => $this->container->get('FormService'),
-                'category_id' => $category_id,
-                'type' => $type,
-                'category_choices' => $category_choices,
-                'language_choices' => $this->container->get('LanguageService')->getLanguageChoices(),
-                'clang_id' => $clang_id,
-                'search' => $search,
+                'all_arts' => $all_arts,
+                'all_files' => $all_files,
+                'all_media_categories' => $all_media_categories,
+                'media_format' => \rex_config::get('tinymce4', 'media_format'),
             ));
 
     }
