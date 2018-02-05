@@ -87,8 +87,7 @@ var ArticleType = {
     <li class=""
         v-for="art in search_results"
         >
-    <a @click="selectArticle(art)"
-                >{{art.name}}</a>
+        <a @click="selectArticle(art)" class="article" >{{art.name}}</a>
     </li>
 </ul>
 <h4>
@@ -99,18 +98,18 @@ var ArticleType = {
 </h4>
 <div class="row">
     <div class="col-xs-6">
-        <ul class="list-group">
-        <li v-for="art in categories" class="list-group-item">
+        <ul class="">
+        <li v-for="art in categories" class="category">
             <a @click="setCategoryId(art.id)">{{art.catname}}</a>
         </li>
         </ul>
     </div>
     <div class="col-xs-6">
         <ul class="">
-        <li v-if="category_id != 0" class="">
-            <a @click="selectArticle(art)" >{{current_category.name}}</a>
+        <li v-if="category_id != 0" class="article startarticle">
+            <a @click="selectArticle(art)" title="Startartikel">{{current_category.name}}</a>
         </li>
-        <li v-for="art in category_articles" class="">
+        <li v-for="art in category_articles" class="article">
             <a @click="selectArticle(art)" >{{art.name}}</a>
         </li>
         </ul>
@@ -199,7 +198,7 @@ var FileType = {
     <input v-model="search" type="text" class="form-control" placeholder="Suche" />
 </div>
 <ul class="">
-<li v-for="file in search_results" class="">
+<li v-for="file in search_results" class="file">
     <a @click="selectFile(file)">{{file.filename}}</a>
 </li>
 </ul>
@@ -211,15 +210,15 @@ var FileType = {
 </h4>
 <div class="row">
     <div class="col-xs-6">
-        <ul class="list-group">
-        <li v-for="cat in categories" class="list-group-item">
+        <ul class="">
+        <li v-for="cat in categories" class="category">
             <a @click="setCategoryId(cat.id)">{{cat.name}}</a>
         </li>
         </ul>
     </div>
     <div class="col-xs-6">
         <ul class="">
-        <li v-for="file in category_files" class="">
+        <li v-for="file in category_files" class="file">
             <a @click="selectFile(file)">{{file.filename}}</a>
         </li>
         </ul>
@@ -227,6 +226,9 @@ var FileType = {
 </div>
 </div>
 </script>
+
+
+
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function(){
     Vue.prototype.$articles = <?php echo json_encode($all_arts);?>;
@@ -249,6 +251,37 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 <style>
 a {cursor:pointer;}
+
+ul{
+    padding: 0;
+    margin: 0;
+}
+li {
+    list-style-type:none;
+
+}
+li.category:before {
+    /*Using a Bootstrap glyphicon as the bullet point*/
+    content: "\e117";
+    font-family: 'Glyphicons Halflings';
+    font-size: 9px;
+    margin-right: 4px;
+}
+li.file:before {
+    content: "\e144";
+    font-family: 'Glyphicons Halflings';
+    font-size: 9px;
+    margin-right: 4px;
+}
+li.article:before {
+    content: "\e144";
+    font-family: 'Glyphicons Halflings';
+    font-size: 9px;
+    margin-right: 4px;
+}
+li.article.startarticle {
+    font-weight:bold;
+}
 </style>
 <div id="app" class="col-xs-12">
 
