@@ -3,16 +3,13 @@
 var win = top.tinymce.activeEditor.windowManager.getParams().window;
 var field_name = top.tinymce.activeEditor.windowManager.getParams().input;
 
-document.addEventListener('DOMContentLoaded', function(){
-Vue.prototype.$articles = <?php echo json_encode($all_arts);?>;
-Vue.prototype.$files    = <?php echo json_encode($all_files);?>;
-Vue.prototype.$media_categories  = <?php echo json_encode($all_media_categories);?>;
-Vue.prototype.$media_format  = '<?php echo $media_format;?>';
+
 
 /*
 * Component article-type
  */
-Vue.component('article-type', {
+var ArticleType = { 
+    template: '#article-type-template',
     data: function(){
         return {
             search: '',
@@ -74,57 +71,59 @@ Vue.component('article-type', {
             win.document.getElementById(field_name).value = 'redaxo://'+art.id+'-'+art.clang_id;
             win.tinymce.activeEditor.windowManager.close();
         },
-    },
-    template: `
-        <div>
-        <div class="form-group">
-            <input type="text"
-                class="form-control"
-                v-model="search"
-                placeholder="Suche"
-                />
-        </div>
-        <ul class="">
-            <li class=""
-                v-for="art in search_results"
-                >
-            <a @click="selectArticle(art)"
-                        >{{art.name}}</a>
-            </li>
+    }
+};
+</script>,
+<script type="text/x-template" id="article-type-template">
+<div>
+<div class="form-group">
+    <input type="text"
+        class="form-control"
+        v-model="search"
+        placeholder="Suche"
+        />
+</div>
+<ul class="">
+    <li class=""
+        v-for="art in search_results"
+        >
+    <a @click="selectArticle(art)"
+                >{{art.name}}</a>
+    </li>
+</ul>
+<h4>
+    <span v-if="category_id != 0" class="pull-left">
+    <button  @click="setCategoryId(current_category.parent_id)" class="btn btn-default btn-xs">&lt;</button>&nbsp;
+    </span>
+    {{current_category.catname}}
+</h4>
+<div class="row">
+    <div class="col-xs-6">
+        <ul class="list-group">
+        <li v-for="art in categories" class="list-group-item">
+            <a @click="setCategoryId(art.id)">{{art.catname}}</a>
+        </li>
         </ul>
-        <h4>
-            <span v-if="category_id != 0" class="pull-left">
-            <button  @click="setCategoryId(current_category.parent_id)" class="btn btn-default btn-xs">&lt;</button>&nbsp;
-            </span>
-            {{current_category.catname}}
-        </h4>
-        <div class="row">
-            <div class="col-xs-6">
-                <ul class="list-group">
-                <li v-for="art in categories" class="list-group-item">
-                    <a @click="setCategoryId(art.id)">{{art.catname}}</a>
-                </li>
-                </ul>
-            </div>
-            <div class="col-xs-6">
-                <ul class="">
-                <li v-if="category_id != 0" class="">
-                    <a @click="selectArticle(art)" >{{current_category.name}}</a>
-                </li>
-                <li v-for="art in category_articles" class="">
-                    <a @click="selectArticle(art)" >{{art.name}}</a>
-                </li>
-                </ul>
-            </div>
-        </div>
-        </div>
-    `
-});
-
+    </div>
+    <div class="col-xs-6">
+        <ul class="">
+        <li v-if="category_id != 0" class="">
+            <a @click="selectArticle(art)" >{{current_category.name}}</a>
+        </li>
+        <li v-for="art in category_articles" class="">
+            <a @click="selectArticle(art)" >{{art.name}}</a>
+        </li>
+        </ul>
+    </div>
+</div>
+</div>
+</script>
+<script type="text/javascript">
 /*
 * Component article-type
  */
-Vue.component('file-type', {
+var FileType = {
+    template: '#file-type-template',
     data: function(){
         return {
             search: '',
@@ -191,49 +190,59 @@ Vue.component('file-type', {
             }
             win.tinymce.activeEditor.windowManager.close();
         },
-    },
-    template: `
-        <div>
-        <div class="form-group">
-            <input v-model="search" type="text" class="form-control" placeholder="Suche" />
-        </div>
+    }
+};
+</script>
+<script type="text/x-template" id="file-type-template">
+<div>
+<div class="form-group">
+    <input v-model="search" type="text" class="form-control" placeholder="Suche" />
+</div>
+<ul class="">
+<li v-for="file in search_results" class="">
+    <a @click="selectFile(file)">{{file.filename}}</a>
+</li>
+</ul>
+<h4>
+    <span v-if="category_id != 0" class="pull-left">
+    <button @click="setCategoryId(current_category.parent_id)" class="btn btn-default btn-xs">&lt;</button>&nbsp;
+    </span>
+    {{current_category.name}}
+</h4>
+<div class="row">
+    <div class="col-xs-6">
+        <ul class="list-group">
+        <li v-for="cat in categories" class="list-group-item">
+            <a @click="setCategoryId(cat.id)">{{cat.name}}</a>
+        </li>
+        </ul>
+    </div>
+    <div class="col-xs-6">
         <ul class="">
-        <li v-for="file in search_results" class="">
+        <li v-for="file in category_files" class="">
             <a @click="selectFile(file)">{{file.filename}}</a>
         </li>
         </ul>
-        <h4>
-            <span v-if="category_id != 0" class="pull-left">
-            <button @click="setCategoryId(current_category.parent_id)" class="btn btn-default btn-xs">&lt;</button>&nbsp;
-            </span>
-            {{current_category.name}}
-        </h4>
-        <div class="row">
-            <div class="col-xs-6">
-                <ul class="list-group">
-                <li v-for="cat in categories" class="list-group-item">
-                    <a @click="setCategoryId(cat.id)">{{cat.name}}</a>
-                </li>
-                </ul>
-            </div>
-            <div class="col-xs-6">
-                <ul class="">
-                <li v-for="file in category_files" class="">
-                    <a @click="selectFile(file)">{{file.filename}}</a>
-                </li>
-                </ul>
-            </div>
-        </div>
-        </div>
-    `
-});
-
-var app = new Vue({
-    el: '#app',
-    data: {
-        currentComponent: 'article-type',
-    },
-});
+    </div>
+</div>
+</div>
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function(){
+    Vue.prototype.$articles = <?php echo json_encode($all_arts);?>;
+    Vue.prototype.$files    = <?php echo json_encode($all_files);?>;
+    Vue.prototype.$media_categories  = <?php echo json_encode($all_media_categories);?>;
+    Vue.prototype.$media_format  = '<?php echo $media_format;?>';
+    var app = new Vue({
+        el: '#app',
+        components: {
+            'article-type': ArticleType, 
+            'file-type': FileType, 
+        },
+        data: {
+            currentComponent: 'article-type',
+        },
+    });
 
 });/* end of event handler */
 

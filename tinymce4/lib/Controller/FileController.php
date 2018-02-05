@@ -13,11 +13,19 @@ class FileController
     public function indexAction() {
         $clang_id = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
         $db = \rex_sql::factory();
-        $sql = "SELECT * FROM ".\rex::getTable('article')." WHERE clang_id=$clang_id";
+        $sql = "SELECT pid,id,parent_id,
+            `name`,catname,catpriority,startarticle,
+            priority,status,clang_id 
+            FROM ".\rex::getTable('article')." 
+            WHERE clang_id=$clang_id";
         $all_arts = $db->getArray($sql);
-        $sql =  "SELECT * FROM ".\rex::getTable('media')." WHERE 1";
+        $sql =  "SELECT id,category_id,filename,originalname,title
+            FROM ".\rex::getTable('media')." 
+            WHERE 1";
         $all_files = $db->getArray($sql);
-        $sql =  "SELECT * FROM ".\rex::getTable('media_category')." WHERE 1";
+        $sql =  "SELECT id,`name`,parent_id 
+            FROM ".\rex::getTable('media_category')." 
+            WHERE 1";
         $all_media_categories = $db->getArray($sql);
         return $this->container->get('RenderService')->render(
             'frontend/file_index.php', array(
@@ -29,6 +37,7 @@ class FileController
 
     }
 
+    /*
     public function listAction() {
         $filter = $this->container->get('FilterService');
         $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
@@ -125,6 +134,7 @@ class FileController
                 
             ));
     }
+     */
     
 }
 
