@@ -15,7 +15,7 @@ rex_config::set('tinymce4', 'profiles', serialize($profiles));
  */
 
 if(null === rex_config::get('tinymce4', 'profiles')){
-    include_once __DIR__.'/src/Models/Profile.php';
+    include_once __DIR__.'/lib/Models/Profile.php';
     $profile = new Tinymce4\Models\Profile();
     // Gespeichert als array, darum umformen
     $profiles = array(array(

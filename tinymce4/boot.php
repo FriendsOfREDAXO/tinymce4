@@ -1,4 +1,5 @@
 <?php
+/*
 spl_autoload_register(function ($class) {
     $prefix = 'Tinymce4';
     $base_dir = dirname(__FILE__).'/src';
@@ -11,6 +12,7 @@ spl_autoload_register(function ($class) {
         require $file;
     }
 });
+ */
 
 if (rex::isBackend() && isset($_REQUEST['page']) && !isset($_REQUEST['_pjax'])) {
     // Tinymce core
