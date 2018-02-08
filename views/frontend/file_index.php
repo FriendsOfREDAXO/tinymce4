@@ -73,7 +73,7 @@ var ArticleType = {
         },
     }
 };
-</script>,
+</script>
 <script type="text/x-template" id="article-type-template">
 <div>
 <div class="form-group">
@@ -285,15 +285,17 @@ li.article.startarticle {
 </style>
 <div id="app" class="col-xs-12">
 
-<div class="form-group" style="padding-top:15px">
-    <label>
-    <input type="radio" value="article-type" v-model="currentComponent">
-    Seite</label>
-    <label>
-    <input type="radio" value="file-type" v-model="currentComponent">
-    Datei</label>
-</div>
-<div :is="currentComponent"></div>
+    <div class="form-group" style="padding-top:15px">
+        <label>
+            <input type="radio" value="article-type" v-model="currentComponent">
+            <?= rex_i18n::msg('article') ?>
+        </label>
+        <label>
+            <input type="radio" value="file-type" v-model="currentComponent">
+            <?= rex_i18n::msg('media') ?>
+        </label>
+    </div>
+    <div :is="currentComponent"></div>
 </div>
 
 <?php include 'bottom.php'; ?>
