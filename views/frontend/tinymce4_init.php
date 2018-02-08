@@ -5,7 +5,7 @@ function redaxo5FileBrowser (field_name, url, type, win) {
        the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
        These lines of code extract the necessary parameters and add them back to the filebrowser URL again. */
 
-    var cmsURL = 'index.php?tinymce4_call=';    // script URL - use an absolute path!
+    var cmsURL = 'index.php?mce_profile='+ tinymce.activeEditor.profile +'&tinymce4_call=';    // script URL - use an absolute path!
     if ('image' == type) {
         cmsURL+= '/image/index';
         var browser_name = 'Bild auswählen';
@@ -40,23 +40,47 @@ function redaxo5FileBrowser (field_name, url, type, win) {
 }
 
 function tinymce4_remove() {
+    $('.mce-initialized').removeClass('mce-initialized');
     tinymce.remove();
 }
 
 function tinymce4_init(){
-    // Erst instanzen zerstören, erforderlich für "Block übernehmen"
-    tinymce4_remove();
-    <?php foreach ($profiles as $profile):?>
-        tinymce.init(<?php echo $profile->json;?>);
+    <?php foreach ($profiles as $profile): ?>
+        var profile = <?= $profile->json ?>;
+        profile.selector += ':not(.mce-initialized)';
+
+        profile.setup = function(editor) {
+            editor.profile = '<?= $profile->id ?>';
+        };
+        tinymce.init(profile).then(function(editors) {
+            for(var i in editors) {
+                $(editors[i].targetElm).addClass('mce-initialized');
+            }
+        });
     <?php endforeach;?>
     return false;
 }
 
 $(document).on('ready pjax:success',function() {
-    tinymce4_init();
-    if (typeof mblock_module === 'object') {
-        mblock_module.registerCallback('add_item_start', tinymce4_remove);
-        mblock_module.registerCallback('reindex_end', tinymce4_init);
+    // Erst instanzen zerstören, erforderlich für "Block übernehmen"
+    window.setTimeout(function() {
+        tinymce4_remove();
+        tinymce4_init();
+    }, 100);
+
+    if (typeof mblock_module === 'object' && !document.tinymce_mblock_initialized) {
+        document.tinymce_mblock_initialized = true;
+
+        mblock_module.registerCallback('reindex_end', function() {
+            if (mblock_module.lastAction == 'add_item' || mblock_module.lastAction == 'sort') {
+                mblock_module.affectedItem.find('.mce-initialized').removeClass('mce-initialized').show();
+                mblock_module.affectedItem.find('.mce-tinymce.mce-container').remove();
+                tinymce4_init();
+            }
+        });
     }
 });
 
+$(document).on('be_table:row-added',function() {
+    tinymce4_init();
+});
