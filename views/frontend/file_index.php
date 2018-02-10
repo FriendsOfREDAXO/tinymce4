@@ -8,7 +8,7 @@ var field_name = top.tinymce.activeEditor.windowManager.getParams().input;
 /*
 * Component article-type
  */
-var ArticleType = { 
+var ArticleType = {
     template: '#article-type-template',
     data: function(){
         return {
@@ -33,7 +33,7 @@ var ArticleType = {
         categories: function(){
             let that = this;
             let cats = this.articles.filter(function(art){
-                return (1 == parseInt(art.startarticle) 
+                return (1 == parseInt(art.startarticle)
                     && parseInt(art.parent_id)==parseInt(that.category_id));
             });
             return cats.sort(function(a, b){
@@ -73,7 +73,7 @@ var ArticleType = {
         },
     }
 };
-</script>,
+</script>
 <script type="text/x-template" id="article-type-template">
 <div>
 <div class="form-group">
@@ -96,7 +96,7 @@ var ArticleType = {
     </span>
     {{current_category.catname}}
 </h4>
-<div class="row">
+<div v-if="!search_results.length" class="row">
     <div class="col-xs-6">
         <ul class="">
         <li v-for="art in categories" class="category">
@@ -208,7 +208,7 @@ var FileType = {
     </span>
     {{current_category.name}}
 </h4>
-<div class="row">
+<div v-if="!search_results.length" class="row">
     <div class="col-xs-6">
         <ul class="">
         <li v-for="cat in categories" class="category">
@@ -226,6 +226,96 @@ var FileType = {
 </div>
 </div>
 </script>
+<script type="text/javascript">
+/*
+* Component table-type
+ */
+var TableType = {
+    template: '#table-type-template',
+    data: function(){
+        return {
+            search: '',
+            table: '',
+        };
+    },
+    computed: {
+        tables: function(){
+            return this.$tables;
+        },
+        search_results: function(){
+            if ('' == this.search) {
+                return [];
+            } else {
+                let that = this;
+                return this.current_table.data.filter(function(item){
+                    return (-1 != item.name.indexOf(that.search));
+                });
+            }
+        },
+        current_table: function(){
+            let that = this;
+            let res = this.tables.filter(function(data){
+                return data.table == that.table;
+            });
+            if (0 == res.length){
+                return { id: 0, name: '<?= rex_i18n::msg('tables') ?>', };
+            } else {
+                return res[0];
+            }
+        },
+        rows: function(){
+            return this.current_table.data;
+        },
+    },
+    methods: {
+        selectTable: function(table){
+            this.table = table;
+        },
+        selectItem: function(item){
+            win.document.getElementById(field_name).value = item.url;
+            win.tinymce.activeEditor.windowManager.close();
+        },
+    }
+};
+</script>
+<script type="text/x-template" id="table-type-template">
+    <div>
+        <h4>
+            <span v-if="table != ''" class="pull-left">
+                <button  @click="selectTable('')" class="btn btn-default btn-xs">&lt;</button>&nbsp;
+            </span>
+            {{current_table.tablename}}
+        </h4>
+
+        <div v-if="table != ''" >
+            <div class="form-group">
+                <input type="text" class="form-control" v-model="search" placeholder="<?= rex_i18n::msg('be_search_search') ?>" />
+            </div>
+            <ul>
+                <li class="" v-for="item in search_results">
+                    <a @click="selectItem(item)" class="article" >{{item.name}}</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div v-if="table == ''" class="col-xs-6">
+                <ul class="">
+                    <li v-for="data in tables" class="tables">
+                        <a @click="selectTable(data.table)">{{data.tablename}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div v-if="!search_results.length" class="col-xs-12">
+                <ul class="">
+                    <li v-for="item in rows" class="article">
+                        <a @click="selectItem(item)" >{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>
 
 
 
@@ -233,13 +323,15 @@ var FileType = {
 document.addEventListener('DOMContentLoaded', function(){
     Vue.prototype.$articles = <?php echo json_encode($all_arts);?>;
     Vue.prototype.$files    = <?php echo json_encode($all_files);?>;
+    Vue.prototype.$tables   = <?php echo json_encode($all_tables);?>;
     Vue.prototype.$media_categories  = <?php echo json_encode($all_media_categories);?>;
     Vue.prototype.$media_format  = '<?php echo $media_format;?>';
     var app = new Vue({
         el: '#app',
         components: {
-            'article-type': ArticleType, 
-            'file-type': FileType, 
+            'article-type': ArticleType,
+            'file-type': FileType,
+            'table-type': TableType,
         },
         data: {
             currentComponent: 'article-type',
@@ -285,15 +377,23 @@ li.article.startarticle {
 </style>
 <div id="app" class="col-xs-12">
 
-<div class="form-group" style="padding-top:15px">
-    <label>
-    <input type="radio" value="article-type" v-model="currentComponent">
-    Seite</label>
-    <label>
-    <input type="radio" value="file-type" v-model="currentComponent">
-    Datei</label>
-</div>
-<div :is="currentComponent"></div>
+    <div class="form-group" style="padding-top:15px">
+        <label>
+            <input type="radio" value="article-type" v-model="currentComponent">
+            <?= rex_i18n::msg('article') ?>
+        </label>
+        <label>
+            <input type="radio" value="file-type" v-model="currentComponent">
+            <?= rex_i18n::msg('media') ?>
+        </label>
+        <?php if (count($all_files)): ?>
+            <label>
+                <input type="radio" value="table-type" v-model="currentComponent">
+                <?= rex_i18n::msg('table') ?>
+            </label>
+        <?php endif; ?>
+    </div>
+    <div :is="currentComponent"></div>
 </div>
 
 <?php include 'bottom.php'; ?>

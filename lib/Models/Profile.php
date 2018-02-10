@@ -50,6 +50,19 @@ class Profile
         return $errors;
     }
 
+    public function decode() {
+        $data = array();
+        $rows = explode("\n", strtr(trim(trim(trim($this->json, '{'), '}')), ["\t" => '']));
+
+        foreach ($rows as $row) {
+            $row        = trim($row);
+            $key        = substr($row, 0, strpos($row, ':'));
+            $value      = substr($row, strpos($row, ':') + 1);
+            $data[$key] = $value;
+        }
+        return $data;
+    }
+
     // Gibt die Daten mit dem Label zurück
     public function hydrate($data, $container) {
         if (isset($data['id'])){
