@@ -107,7 +107,7 @@ var ArticleType = {
     <div class="col-xs-6">
         <ul class="">
         <li v-if="category_id != 0" class="article startarticle">
-            <a @click="selectArticle(art)" title="Startartikel">{{current_category.name}}</a>
+            <a @click="selectArticle(current_category)" title="Startartikel">{{current_category.name}}</a>
         </li>
         <li v-for="art in category_articles" class="article">
             <a @click="selectArticle(art)" >{{art.name}}</a>
