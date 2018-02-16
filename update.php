@@ -62,3 +62,6 @@ if(null === rex_config::get('tinymce4', 'image_format')){
 if(null === rex_config::get('tinymce4', 'media_format')){
     rex_config::set('tinymce4', 'media_format', 'default');
 }
+
+$service_container = Tinymce4\Services\ServiceContainer::getInstance();
+$service_container->get('ProfileRepository')->rebuildInitScripts();
