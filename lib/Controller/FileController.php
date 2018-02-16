@@ -38,7 +38,7 @@ class FileController
         if ($this->profile) {
             $profile_data = $this->profile->decode();
 
-            if (strlen($profile_data['tables'])) {
+            if (isset($profile_data['tables']) && strlen($profile_data['tables'])) {
                 /*
                     Example profile config:
                     tables: 'rex_table_1[fields:field_1+field_2,filter:field_status=1,order:field_1],rex_table_2[fields:field_1]'
