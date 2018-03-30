@@ -1,3 +1,4 @@
+<?php die('deprecated. not used any more');?>
 <?php if (0 == $offset && 0 == count($link_list)) :?>
 <div class="alert alert-info">
     Keine gefunden 

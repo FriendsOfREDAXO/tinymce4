@@ -15,7 +15,7 @@ rex_config::set('tinymce4', 'profiles', serialize($profiles));
  */
 
 if(null === rex_config::get('tinymce4', 'profiles')){
-    include_once __DIR__.'/src/Models/Profile.php';
+    include_once __DIR__.'/lib/Models/Profile.php';
     $profile = new Tinymce4\Models\Profile();
     // Gespeichert als array, darum umformen
     $profiles = array(array(
@@ -62,3 +62,6 @@ if(null === rex_config::get('tinymce4', 'image_format')){
 if(null === rex_config::get('tinymce4', 'media_format')){
     rex_config::set('tinymce4', 'media_format', 'default');
 }
+
+$service_container = Tinymce4\Services\ServiceContainer::getInstance();
+$service_container->get('ProfileRepository')->rebuildInitScripts();
