@@ -2,7 +2,7 @@
 
 ## Default-Profil
 
-```json
+```yml
 {
 selector: 'textarea.tinyMCEEditor',
 file_browser_callback: redaxo5FileBrowser,
@@ -27,7 +27,7 @@ Weitere Infos zum Thema: https://www.tinymce.com/docs/configure/url-handling/
 
 Damit die Bootstrap-Tabellenklassen rsp. auch die Bootstrap-Bilder-Klassen im Editor verfügbar sind, kann das folgende Snippet dem Profil hinzu gefügt werden:
 
-```json
+```yml
 table_class_list: [
     {title: 'None', value: ''},
     {title: 'Table', value: 'table'},
