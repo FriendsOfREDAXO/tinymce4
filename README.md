@@ -1,4 +1,4 @@
-# Tinymce4 Addon für Redaxo5
+# TinyMCE4-Editor für REDAXO 5
 
 ## Default-Profil
 
