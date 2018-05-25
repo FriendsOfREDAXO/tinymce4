@@ -1,7 +1,8 @@
-# Tinymce4 Addon für Redaxo5
+# TinyMCE4-Editor für REDAXO 5
 
 ## Default-Profil
-```
+
+```yml
 {
 selector: 'textarea.tinyMCEEditor',
 file_browser_callback: redaxo5FileBrowser,
@@ -12,17 +13,13 @@ content_css: '/assets/addons/tinymce4/bootstrap/css/bootstrap.min.css',
 }
 ```
 
-Wichtig: **redaxo5FileBrowser** ist eine Funktion. Darum werden an dieser Stelle
-**keine Quotes** verwendet. 
+Wichtig: **redaxo5FileBrowser** ist eine Funktion. Darum werden an dieser Stelle **keine Quotes** verwendet. 
 
 ## Empfehlungen
 
 ### convert_urls: false
 
-Wenn convert_urls: true ist, dann verändert Tinymce eingegebene URL's beim speichern.
-Zum Beispiel wird eine URL /media/xxx in ../media/xxx umgewandelt. 
-Dies ist meistens nicht gewünscht, daher sollte convert_urls: false 
-im Profil enthalten sein (beim Default-Profil ist das schon drin).
+Wenn `convert_urls: true` ist, dann verändert Tinymce eingegebene URLs beim speichern. Zum Beispiel wird eine URL `/media/xxx` in `../media/xxx` umgewandelt. Dies ist meistens nicht gewünscht, daher sollte `convert_urls: false` im Profil enthalten sein (beim Default-Profil ist das schon drin).
 
 Weitere Infos zum Thema: https://www.tinymce.com/docs/configure/url-handling/
 
@@ -30,7 +27,7 @@ Weitere Infos zum Thema: https://www.tinymce.com/docs/configure/url-handling/
 
 Damit die Bootstrap-Tabellenklassen rsp. auch die Bootstrap-Bilder-Klassen im Editor verfügbar sind, kann das folgende Snippet dem Profil hinzu gefügt werden:
 
-```
+```yml
 table_class_list: [
     {title: 'None', value: ''},
     {title: 'Table', value: 'table'},
