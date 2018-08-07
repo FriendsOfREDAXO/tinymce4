@@ -1,5 +1,12 @@
 function redaxo5FileBrowser (field_name, url, type, win) {
-     // console.log("Field_Name: " + field_name + "nURL: " + url + "nType: " + type + "nWin: " + win); // debug/testing
+    //  console.debug({
+    // field_name: field_name,
+    // url: url,
+    // type: type,
+    // win: win
+    // }); // debug/testing
+    // console.debug(tinymce.activeEditor);
+    // console.debug(tinymce);
 
     /* If you work with sessions in PHP and your client doesn't accept cookies you might need to carry
        the session name and session ID in the request string (can look like this: "?PHPSESSID=88p0n70s9dsknra96qhuk6etm5").
@@ -27,8 +34,8 @@ function redaxo5FileBrowser (field_name, url, type, win) {
             language:'<?php echo $lang_pack;?>',
         <?php endif;?>
         title : browser_name,
-        width : 420,  // Your dimensions may differ - toy around with them!
-        height : 400,
+        width : 800,  // Your dimensions may differ - toy around with them!
+        height : 700,
         resizable : true,
         inline : true,  // This parameter only has an effect if you use the inlinepopups plugin!
         close_previous : true
@@ -68,19 +75,13 @@ $(document).on('ready pjax:success',function() {
         tinymce4_init();
     }, 100);
 
-    if (typeof mblock_module === 'object' && !document.tinymce_mblock_initialized) {
-        document.tinymce_mblock_initialized = true;
-
-        mblock_module.registerCallback('reindex_end', function() {
-            if (mblock_module.lastAction == 'add_item' || mblock_module.lastAction == 'sort' || mblock_module.lastAction == 'movedown' || mblock_module.lastAction == 'moveup') {
-                mblock_module.affectedItem.find('.mce-initialized').removeClass('mce-initialized').show();
-                mblock_module.affectedItem.find('.mce-tinymce.mce-container').remove();
-                tinymce4_init();
-            }
-        });
+    if (typeof mblock_module === 'object') {
+        mblock_module.registerCallback('add_item_start', tinymce4_remove);
+        mblock_module.registerCallback('reindex_end', tinymce4_init);
     }
 });
 
 $(document).on('be_table:row-added',function() {
     tinymce4_init();
 });
+
