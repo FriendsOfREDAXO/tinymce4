@@ -72,7 +72,7 @@ $(document).on('ready pjax:success',function() {
         document.tinymce_mblock_initialized = true;
 
         mblock_module.registerCallback('reindex_end', function() {
-            if (mblock_module.lastAction == 'add_item') {
+            if (mblock_module.lastAction == 'add_item' || mblock_module.lastAction == 'sort' || mblock_module.lastAction == 'movedown' || mblock_module.lastAction == 'moveup') {
                 mblock_module.affectedItem.find('.mce-initialized').removeClass('mce-initialized').show();
                 mblock_module.affectedItem.find('.mce-tinymce.mce-container').remove();
                 tinymce4_init();
