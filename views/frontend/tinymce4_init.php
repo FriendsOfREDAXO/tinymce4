@@ -29,7 +29,7 @@ function redaxo5FileBrowser (field_name, url, type, win) {
     }
 
     tinyMCE.activeEditor.windowManager.open({
-        file : cmsURL,
+        file : cmsURL + '&ts=' + new Date().getTime(),
         <?php if ('' != $lang_pack):?>
             language:'<?php echo $lang_pack;?>',
         <?php endif;?>
