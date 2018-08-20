@@ -42,7 +42,9 @@ if (rex::isBackend() && isset($_REQUEST['page']) && !isset($_REQUEST['_pjax'])) 
         
         // Wenn Tinymce neu installiert wurde, gibt es die Datei noch nicht
         $filename = \rex_path::addonAssets('tinymce4', 'tinymce4_init.'.$lang_pack.'.js');
-        if (!file_exists($filename)) {
+        $modTime = (int) \rex_config::get('tinymce4', 'profile_upd_date', 1);
+
+        if ($modTime >= (int) @filemtime($filename)) {
             $service_container->get('ProfileRepository')->rebuildInitScripts();
         }
     }

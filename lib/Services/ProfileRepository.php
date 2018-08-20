@@ -42,6 +42,7 @@ class ProfileRepository
         }
         $a[] = get_object_vars($model);
         \rex_config::set('tinymce4', 'profiles',serialize($a));
+        \rex_config::set('tinymce4', 'profile_upd_date', time());
     }
     public function update($model) {
         $v = \rex_config::get('tinymce4', 'profiles');
@@ -56,6 +57,7 @@ class ProfileRepository
             }
         }
         \rex_config::set('tinymce4', 'profiles',serialize($a));
+        \rex_config::set('tinymce4', 'profile_upd_date', time());
     }
     public function remove($model) {
         $v = \rex_config::get('tinymce4', 'profiles');
@@ -70,6 +72,7 @@ class ProfileRepository
             }
         }
         \rex_config::set('tinymce4', 'profiles',serialize($a));
+        \rex_config::set('tinymce4', 'profile_upd_date', time());
     }
 
     public function getModel($data) {
