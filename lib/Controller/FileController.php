@@ -220,23 +220,31 @@ class FileController
             $link_list = $sql->getArray($query, $params);
         } else if ('table' == $type) {
             if (count($this->tables)) {
-                $table = $this->tables[$category_id] ?: $this->tables[0];
-                $where = array_merge([1], (array)$table['filter']);
-                $order = strlen($table['order'][0]) ? $table['order'][0] : $table['fields'][0] . ' ASC';
+                $params = [];
+                $table  = $this->tables[$category_id] ?: $this->tables[0];
+                $where  = array_merge([1], (array)$table['filter']);
+                $order  = strlen($table['order'][0]) ? $table['order'][0] : $table['fields'][0] . ' ASC';
 
                 if (strlen($search)) {
                     $where[] = implode(" LIKE '%{$search}%' OR ", $table['fields']) . " LIKE '%{$search}%'";
                 }
 
-                $sql   = \rex_sql::factory();
+                $sql  = \rex_sql::factory();
+                $from = "
+                    FROM {$table['tablename']}
+                    WHERE " . implode(' AND ', $where) . "
+                    ORDER BY {$order}
+                ";
+
+                $_total      = $sql->getArray("SELECT COUNT(id) AS cnt {$from}", $params);
+                $this->total = $_total[0]['cnt'];
+
                 $query = "
                     SELECT 
                         id, 
                         CONCAT('table://{$table['tablename']}-', id, '-{$clang_id}') AS url, 
                         CONCAT(" . implode('," ",', $table['fields']) . ") AS name 
-                    FROM {$table['tablename']}
-                    WHERE " . implode(' AND ', $where) . "
-                    ORDER BY {$order}
+                    {$from}
                     LIMIT {$offset}, {$limit}
                 ";
                 echo "<!-- Table-Data: " . print_r($table, true) . " -->";
