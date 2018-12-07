@@ -1,6 +1,6 @@
 <?php
 
-$types        = ['link' => 'Seite', /*'media' => 'Datei'*/];
+$types        = ['link' => 'Seite', 'media' => 'Datei'];
 $profile_data = $profile ? $profile->decode() : [];
 
 if (isset($profile_data['tables'])) {
@@ -62,12 +62,12 @@ if (isset($profile_data['tables'])) {
         <?php endif; ?>
 
     </form>
-    <?php if ('link' == $type): ?>
-        <h6>Seiten:</h6>
+    <?php if ('media' == $type): ?>
+        <h6><strong><?= $total ?></strong> Dateien:</h6>
     <?php elseif ('table' == $type): ?>
         <h6>Datensätze:</h6>
     <?php else: ?>
-        <h6>Dateien:</h6>
+        <h6>Seiten:</h6>
     <?php endif; ?>
 
     <?php echo $list_content; ?>

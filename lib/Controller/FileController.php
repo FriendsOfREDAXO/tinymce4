@@ -9,6 +9,7 @@ class FileController
 {
     public    $container;
     protected $tables;
+    protected $total;
 
     public function __construct($container)
     {
@@ -23,11 +24,12 @@ class FileController
     {
         $Repository    = new ProfileRepository($this->container);
         $filter        = $this->container->get('FilterService');
-        $type          = isset($_GET['type']) ? $_GET['type'] : 'link';
+        $type          = rex_get('type', 'string', 'link');
         $category_id   = rex_get('category_id', 'int', 0);
-        $clang_id      = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
+        $clang_id      = rex_get('clang_id', 'int', \rex_clang::getStartId());
+        $onlyFileList  = rex_get('ofl', 'int', 0);
+        $search        = trim($filter->filterString(rex_get('search', 'string')));
         $this->profile = $Repository->find(rex_get('mce_profile', 'string'));
-        $search        = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
 
         if ('table' == $type) {
             $category_choices = [];
@@ -66,33 +68,43 @@ class FileController
 
         $list_content = $this->listAction();
 
-        return $this->container->get('RenderService')
-            ->render('frontend/file_index.php', [
-                'list_content'     => $list_content,
-                'UrlService'       => $this->container->get('UrlService'),
-                'Translator'       => $this->container->get('TranslatorService'),
-                'form'             => $this->container->get('FormService'),
-                'category_id'      => $category_id,
-                'type'             => $type,
-                'category_choices' => $category_choices,
-                'language_choices' => $this->container->get('LanguageService')
-                    ->getLanguageChoices(),
-                'clang_id'         => $clang_id,
-                'profile'          => $this->profile,
-                'search'           => $search,
-            ]);
+        if ($onlyFileList) {
+            return $list_content;
+        } else {
+            return $this->container->get('RenderService')
+                ->render('frontend/file_index.php', [
+                    'list_content'     => $list_content,
+                    'total'            => $this->total,
+                    'UrlService'       => $this->container->get('UrlService'),
+                    'Translator'       => $this->container->get('TranslatorService'),
+                    'form'             => $this->container->get('FormService'),
+                    'category_id'      => $category_id,
+                    'type'             => $type,
+                    'category_choices' => $category_choices,
+                    'language_choices' => $this->container->get('LanguageService')
+                        ->getLanguageChoices(),
+                    'clang_id'         => $clang_id,
+                    'profile'          => $this->profile,
+                    'search'           => $search,
+                ]);
+        }
     }
 
     public function listAction()
     {
-        $filter       = $this->container->get('FilterService');
-        $offset       = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-        $limit        = isset($_GET['limit ']) ? intval($_GET['limit']) : 500;
-        $type         = isset($_GET['type']) ? $_GET['type'] : 'link';
-        $category_id  = rex_get('category_id', 'int', 0);
-        $clang_id     = isset($_GET['clang_id']) ? intval($_GET['clang_id']) : \rex_clang::getStartId();
-        $search       = isset($_GET['search']) ? trim($filter->filterString($_GET['search'])) : '';
-        $media_format = \rex_config::get('tinymce4', 'media_format');
+        $offset      = 0;
+        $limit       = 25;
+        $page        = rex_get('page', 'int', 0);
+        $type        = rex_get('type', 'string', 'link');
+        $category_id = rex_get('category_id', 'int', 0);
+        $clang_id    = rex_get('clang_id', 'int', \rex_clang::getStartId());
+        $filter      = $this->container->get('FilterService');
+        $search      = trim($filter->filterString(rex_get('search', 'string')));
+
+        if ($page) {
+            $offset = $page * $limit;
+        }
+
 
         if ('link' == $type) {
             if (-1 == $category_id) {
@@ -126,43 +138,86 @@ class FileController
             $category_choices = $this->container->get('ArticleRepository')
                 ->getCategoryChoices($clang_id);
         } else if ('media' == $type) {
-            $binds = [];
-            $sql   = "1";
-            foreach (explode(' ', $search) as $s) {
-                if ('' == $s) {
-                    continue;
-                }
-                $sql     .= " AND (
-                    `filename` LIKE ? 
-                    OR `originalname` LIKE ?
-                    OR `title` LIKE ?
-                    )
-                    ";
-                $binds[] = '%' . $s . '%';
-                $binds[] = '%' . $s . '%';
-                $binds[] = '%' . $s . '%';
+            $where  = [1];
+            $params = [];
+
+            if ($category_id) {
+                $where[]         = "category_id = :catId";
+                $params['catId'] = $category_id;
             }
-            if (0 < $category_id) {
-                $sql     = "category_id=?";
-                $binds[] = $category_id;
+            if (strlen($search)) {
+                $where[] = "(
+                    filename LIKE :searchTerm
+                    OR originalname LIKE :searchTerm
+                    OR title LIKE :searchTerm
+                )";
+
+                $params['searchTerm'] = "%{$search}%";
+                $params['searchTerm'] = "%{$search}%";
+                $params['searchTerm'] = "%{$search}%";
             }
-            $media     = $this->container->get('MediaRepository')
-                ->findWhere($sql, $binds, ['originalname' => 'ASC']);
-            $total     = $this->container->get('MediaRepository')
-                ->countWhere($sql, $binds);
-            $link_list = [];
-            $now = date('YmdHis');
-            foreach ($media as $m) {
-                $pic  = "<img class='thumbnail' src='index.php?rex_media_type=rex_mediapool_preview&amp;rex_media_file={$m->originalname}&amp;ts={$now}'>";
-                $name = $pic . $m->originalname;
-                if ('' != $m->title) {
-                    $name .= ' | ' . $m->title;
-                }
-                $link_list[] = [
-                    'url'  => 'default' == $media_format ? '/media/' . urlencode($m->filename) : str_replace('{filename}', urlencode($m->filename), $media_format),
-                    'name' => $name,
-                ];
-            }
+
+            $sql  = \rex_sql::factory();
+            $from = "
+                FROM rex_media
+                WHERE " . implode(' AND ', $where) . "
+                ORDER BY createdate DESC
+            ";
+
+            $_total      = $sql->getArray("SELECT COUNT(id) AS cnt {$from}", $params);
+            $this->total = $_total[0]['cnt'];
+
+            $query = "
+                SELECT 
+                    id, 
+                    filetype,
+                    filename,
+                    CONCAT('/media/', filename) AS url, 
+                    CONCAT(
+                        IF(
+                            filetype = 'image/jpeg',
+                            CONCAT(
+                                '<img class=\"thumbnail\" style=\"float:left;margin:0 10px 0 0;\" src=\"index.php?rex_media_type=rex_mediapool_preview&rex_media_file=',
+                                filename,
+                                '&buster=',
+                                UNIX_TIMESTAMP(),
+                                '\">'
+                            ),
+                            IF (
+                                filetype = 'image/png',
+                                CONCAT(
+                                    '<img class=\"thumbnail\" style=\"float:left;margin:0 10px 0 0;\" src=\"index.php?rex_media_type=rex_mediapool_preview&rex_media_file=',
+                                    filename,
+                                    '&buster=',
+                                    UNIX_TIMESTAMP(),
+                                    '\">'
+                                ),
+                                IF (
+                                    filetype = 'image/gif',
+                                    CONCAT(
+                                        '<img class=\"thumbnail\" style=\"float:left;margin:0 10px 0 0;\" src=\"index.php?rex_media_type=rex_mediapool_preview&rex_media_file=',
+                                        filename,
+                                        '&buster=',
+                                        UNIX_TIMESTAMP(),
+                                        '\">'
+                                    ),
+                                    '<i class=\"rex-mime rex-mime-pdf\" style=\"float:left;margin:0 10px 0 0;\" title=\"\" data-extension=\"pdf\"></i>'
+                                )
+                            )
+                        ),
+                        CONCAT(
+                          IF (LENGTH(title), 
+                              CONCAT(title, ' [', filename, ']'),
+                              filename
+                          ), 
+                          '<br/><span style=\"color:#777\">', DATE_FORMAT(createdate, '%d. %b %Y - %H:%i'), 'h</span><div style=\"clear:both;\"></div>'
+                        ) 
+                    ) AS name 
+                {$from}
+                LIMIT {$offset}, {$limit}
+            ";
+            echo "<!-- Media-Query: {$query} -->";
+            $link_list = $sql->getArray($query, $params);
         } else if ('table' == $type) {
             if (count($this->tables)) {
                 $table = $this->tables[$category_id] ?: $this->tables[0];
@@ -182,6 +237,7 @@ class FileController
                     FROM {$table['tablename']}
                     WHERE " . implode(' AND ', $where) . "
                     ORDER BY {$order}
+                    LIMIT {$offset}, {$limit}
                 ";
                 echo "<!-- Table-Data: " . print_r($table, true) . " -->";
                 echo "<!-- Table-Query: {$query} -->";
@@ -199,10 +255,9 @@ class FileController
                 'type'        => $type,
                 'clang_id'    => $clang_id,
                 'search'      => $search,
-                'total'       => $total,
+                'total'       => $this->total,
                 'offset'      => $offset,
-                'limit'       => $limit,
-
+                'page'        => $page,
             ]);
     }
 
