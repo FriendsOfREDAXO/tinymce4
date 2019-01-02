@@ -1,8 +1,7 @@
 <?php
 
 if (rex::isBackend() && isset($_REQUEST['page']) && !isset($_REQUEST['_pjax'])) {
-    // Tinymce core
-    rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'));
+    rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'), [rex_view::JS_IMMUTABLE => false]);
 
     // css klappt noch nicht im Moment, weil Dialog und 
     // Filemanager die gleichen Klassen verwenden, das Innere des Dialogs aber 
