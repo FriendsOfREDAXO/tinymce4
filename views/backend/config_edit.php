@@ -1,5 +1,5 @@
 <form class="form form-horizontal"
-    action="<?php echo $UrlService->getUrl('/config/edit/'.$id);?>"
+    action="<?php echo $UrlService->getUrl('/config/edit/');?>"
     method="POST"
     >
 <div class="text-right">
