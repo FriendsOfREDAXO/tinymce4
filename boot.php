@@ -2,7 +2,8 @@
 
 if (rex::isBackend() && isset($_REQUEST['page']) && !isset($_REQUEST['_pjax'])) {
     if (defined('rex_view::JS_IMMUTABLE')) {
-        // R5.7+
+        // R5.7+ support
+        // disable asset-streaming, because tiny will load plugins after the main file which wouldn't work
         rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'), [rex_view::JS_IMMUTABLE => false]);
     } else {
         rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'));
