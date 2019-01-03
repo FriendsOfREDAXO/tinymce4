@@ -1,8 +1,12 @@
 <?php
 
 if (rex::isBackend() && isset($_REQUEST['page']) && !isset($_REQUEST['_pjax'])) {
-    // Tinymce core
-    rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'));
+    if (defined('rex_view::JS_IMMUTABLE')) {
+        // R5.7+
+        rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'), [rex_view::JS_IMMUTABLE => false]);
+    } else {
+        rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'));
+    }
 
     // css klappt noch nicht im Moment, weil Dialog und 
     // Filemanager die gleichen Klassen verwenden, das Innere des Dialogs aber 
