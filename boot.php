@@ -1,22 +1,13 @@
 <?php
-/*
-spl_autoload_register(function ($class) {
-    $prefix = 'Tinymce4';
-    $base_dir = dirname(__FILE__).'/src';
-
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) !== 0) return;
-    $relative_class = substr($class, $len);
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
-    if (file_exists($file)) {
-        require $file;
-    }
-});
- */
 
 if (rex::isBackend() && isset($_REQUEST['page']) && !isset($_REQUEST['_pjax'])) {
-    // Tinymce core
-    rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'));
+    if (defined('rex_view::JS_IMMUTABLE')) {
+        // R5.7+ support
+        // disable asset-streaming, because tiny will load plugins after the main file which wouldn't work
+        rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'), [rex_view::JS_IMMUTABLE => false]);
+    } else {
+        rex_view::addJsFile(rex_url::addonAssets('tinymce4', 'tinymce/tinymce.min.js'));
+    }
 
     // css klappt noch nicht im Moment, weil Dialog und 
     // Filemanager die gleichen Klassen verwenden, das Innere des Dialogs aber 
