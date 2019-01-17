@@ -68,7 +68,7 @@ function tinymce4_init(){
     return false;
 }
 
-$(document).on('ready pjax:success',function() {
+$(document).on('rex:ready',function() {
     // Erst instanzen zerstören, erforderlich für "Block übernehmen"
     window.setTimeout(function() {
         tinymce4_remove();
@@ -79,6 +79,12 @@ $(document).on('ready pjax:success',function() {
         mblock_module.registerCallback('add_item_start', tinymce4_remove);
         mblock_module.registerCallback('reindex_end', tinymce4_init);
     }
+});
+
+$(document).on('rex:change', function(e, container){
+    container.find('.mce-initialized').removeClass('mce-initialized').show();
+    container.find('.mce-tinymce.mce-container').remove();
+    tinymce4_init();
 });
 
 $(document).on('be_table:row-added',function() {
