@@ -46,9 +46,14 @@ function redaxo5FileBrowser (field_name, url, type, win) {
     return false;
 }
 
-function tinymce4_remove() {
-    $('.mce-initialized').removeClass('mce-initialized');
-    tinymce.remove();
+function tinymce4_remove(container, removeTiny) {
+    if (removeTiny) {
+        $('.mce-initialized').removeClass('mce-initialized');
+        tinymce.remove();
+    } else {
+        container.find('.mce-initialized').removeClass('mce-initialized').show();
+        container.find('.mce-tinymce.mce-container').remove();
+    }
 }
 
 function tinymce4_init(){
@@ -68,10 +73,15 @@ function tinymce4_init(){
     return false;
 }
 
-$(document).on('rex:ready',function() {
+$(document).on('rex:ready',function(e, container) {
+    var removeTiny = false;
+
+    if (container.find('#REX_FORM').length) {
+        removeTiny = true;
+    }
     // Erst instanzen zerstören, erforderlich für "Block übernehmen"
     window.setTimeout(function() {
-        tinymce4_remove();
+        tinymce4_remove(container, removeTiny);
         tinymce4_init();
     }, 100);
 
@@ -82,8 +92,7 @@ $(document).on('rex:ready',function() {
 });
 
 $(document).on('rex:change', function(e, container){
-    container.find('.mce-initialized').removeClass('mce-initialized').show();
-    container.find('.mce-tinymce.mce-container').remove();
+    tinymce4_remove(container, false);
     tinymce4_init();
 });
 
