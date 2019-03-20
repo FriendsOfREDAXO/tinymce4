@@ -1,5 +1,6 @@
 <?php
 
+$call         = rex_get('tinymce4_call', 'string', '');
 $types        = ['link' => 'Seite', 'media' => 'Datei'];
 $profile_data = $profile ? $profile->decode() : [];
 
@@ -11,18 +12,23 @@ if (isset($profile_data['tables'])) {
 <?php include 'top.php'; ?>
 <div class="col-xs-12">
     <form class="form filter-form" method="GET" action="index.php" id="category_selection">
-        <input type="hidden" name="tinymce4_call" value="/file/index"/>
         <input type="hidden" name="mce_profile" value="<?= $profile->id ?>"/>
         <div class="row">
-            <div class="col-xs-6">
-                <label>Link-Typ</label>
-                <div class="form-group">
-                    <?php echo $form->select('type', $types, $type, [
-                        'onchange' => 'setType()',
-                        'class'    => 'form-control',
-                    ]); ?>
+            <?php if ($call != '/image/index'): ?>
+                <input type="hidden" name="tinymce4_call" value="/file/index"/>
+                <div class="col-xs-6">
+                    <label>Link-Typ</label>
+                    <div class="form-group">
+                        <?php echo $form->select('type', $types, $type, [
+                            'onchange' => 'setType()',
+                            'class'    => 'form-control',
+                        ]); ?>
+                    </div>
                 </div>
-            </div>
+            <?php else: ?>
+                <input type="hidden" name="tinymce4_call" value="/image/index"/>
+                <input type="hidden" name="type" value="media"/>
+            <?php endif; ?>
             <div class="col-xs-6">
                 <?php if ('link' == $type || $type == 'table'): ?>
                     <div class="form-group">

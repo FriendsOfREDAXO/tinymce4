@@ -24,7 +24,8 @@ class FileController
     {
         $Repository    = new ProfileRepository($this->container);
         $filter        = $this->container->get('FilterService');
-        $type          = rex_get('type', 'string', 'link');
+        $call          = rex_get('tinymce4_call', 'string', '');
+        $type          = rex_get('type', 'string', $call == '/image/index' ? 'media' : 'link');
         $category_id   = rex_get('category_id', 'int', 0);
         $clang_id      = rex_get('clang_id', 'int', \rex_clang::getStartId());
         $onlyFileList  = rex_get('ofl', 'int', 0);
@@ -95,7 +96,8 @@ class FileController
         $offset      = 0;
         $limit       = 25;
         $page        = rex_get('page', 'int', 0);
-        $type        = rex_get('type', 'string', 'link');
+        $call        = rex_get('tinymce4_call', 'string', '');
+        $type        = rex_get('type', 'string', $call == '/image/index' ? 'media' : 'link');
         $category_id = rex_get('category_id', 'int', 0);
         $clang_id    = rex_get('clang_id', 'int', \rex_clang::getStartId());
         $filter      = $this->container->get('FilterService');
@@ -180,7 +182,7 @@ class FileController
                                 '<img class=\"thumbnail\" style=\"float:left;margin:0 10px 0 0;\" src=\"index.php?rex_media_type=rex_mediapool_preview&rex_media_file=',
                                 filename,
                                 '&buster=',
-                                UNIX_TIMESTAMP(),
+                                updatedate,
                                 '\">'
                             ),
                             IF (
@@ -189,7 +191,7 @@ class FileController
                                     '<img class=\"thumbnail\" style=\"float:left;margin:0 10px 0 0;\" src=\"index.php?rex_media_type=rex_mediapool_preview&rex_media_file=',
                                     filename,
                                     '&buster=',
-                                    UNIX_TIMESTAMP(),
+                                    updatedate,
                                     '\">'
                                 ),
                                 IF (
@@ -198,10 +200,20 @@ class FileController
                                         '<img class=\"thumbnail\" style=\"float:left;margin:0 10px 0 0;\" src=\"index.php?rex_media_type=rex_mediapool_preview&rex_media_file=',
                                         filename,
                                         '&buster=',
-                                        UNIX_TIMESTAMP(),
+                                        updatedate,
                                         '\">'
                                     ),
-                                    '<i class=\"rex-mime rex-mime-pdf\" style=\"float:left;margin:0 10px 0 0;\" title=\"\" data-extension=\"pdf\"></i>'
+                                    IF (
+                                        filetype = 'image/svg+xml',
+                                        CONCAT(
+                                            '<img class=\"thumbnail\" style=\"max-width:90px;max-height:100px;float:left;margin:0 10px 0 0;\" src=\"../media/',
+                                            filename,
+                                            '?buster=',
+                                            updatedate,
+                                            '\">'
+                                        ),
+                                        '<i class=\"rex-mime rex-mime-pdf\" style=\"float:left;margin:0 10px 0 0;\" title=\"\" data-extension=\"pdf\"></i>'
+                                    )
                                 )
                             )
                         ),

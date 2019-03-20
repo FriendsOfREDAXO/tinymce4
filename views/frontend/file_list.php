@@ -1,4 +1,4 @@
-<a class="file-list">
+<div class="file-list">
     <?php if (0 == $offset && 0 == count($link_list)) : ?>
         <div class="alert alert-info">
             Keine gefunden
@@ -25,8 +25,9 @@
                'category_id' => $category_id,
                'clang_id'    => $clang_id,
                'search'      => $search,
+               'ts'          => time(),
            ]); ?>" onclick="return loadMore(this)">Mehr</a>
         <br/>
         <br/>
     <?php endif; ?>
-    </div>
+</div>
