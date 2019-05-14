@@ -41,3 +41,17 @@ image_class_list: [
     {title: 'Responsive', value: 'img-responsive'}
 ]
 ```
+### Microsoft Word HTML automatisch beim Einfügen entfernen
+
+Damit unnötiger Word HTML Krempel beim Einfügen automatisch entfernt wird (Redakteure werden euch lieben), aber sonstige Formatierungen erhalten bleiben, einfach die Config mit folgendem Snippet erweitern (wichtig, das Plugin __paste__ wird benötigt, siehe Default-Profil oben).
+
+Im __paste_word_valid_elements__ können die Tags erfasst werden, die beibelassen werden sollen. Alles andere wird herausgefiltert.
+
+```yml
+convert_fonts_to_spans: true,
+paste_word_valid_elements: "b,strong,i,em,h1,h2,u,p,ol,ul,li,a[href],span,mark,table,tr,td",
+paste_retain_style_properties: "all",
+paste_postprocess: function(plugin, args) {
+    args.node.innerHTML = tinymce4_cleanHTML(args.node.innerHTML);
+}
+```

@@ -56,6 +56,31 @@ function tinymce4_remove(container, removeTiny) {
     }
 }
 
+function tinymce4_cleanHTML(input) {
+    // 1. remove line breaks / Mso classes
+    var stringStripper = /(\n|\r| class=(")?Mso[a-zA-Z]+(")?)/g;
+    var output = input.replace(stringStripper, ' ');
+    // 2. strip Word generated HTML comments
+    var commentSripper = new RegExp('<!--(.*?)-->', 'g');
+    var output = output.replace(commentSripper, '');
+    // 3. remove tags leave content if any
+    var tagStripper = new RegExp('<(\/)*(title|meta|link|span|\\?xml:|st1:|o:|font)(.*?)>', 'gi');
+    output = output.replace(tagStripper, '');
+    // 4. Remove everything in between and including tags '<style(.)style(.)>'
+    var badTags = ['style', 'script', 'applet', 'embed', 'noframes', 'noscript'];
+    for (var i = 0; i < badTags.length; i++) {
+        var tagStripper = new RegExp('<' + badTags[i] + '.*?' + badTags[i] + '(.*?)>', 'gi');
+        output = output.replace(tagStripper, '');
+    }
+    // 5. remove attributes ' style="..."'
+    var badAttributes = ['start', 'align'];
+    for (var i = 0; i < badAttributes.length; i++) {
+        var attributeStripper = new RegExp(' ' + badAttributes[i] + '="(.*?)"', 'gi');
+        output = output.replace(attributeStripper, '');
+    }
+    return output;
+};
+
 function tinymce4_init(){
     <?php foreach ($profiles as $profile): ?>
         var profile = <?= $profile->json ?>;
