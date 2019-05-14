@@ -6,9 +6,15 @@
 {
 selector: 'textarea.tinyMCEEditor',
 file_browser_callback: redaxo5FileBrowser,
-plugins: 'advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table contextmenu paste code',
-toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+plugins: 'autoresize  lists  autolink  link  visualblocks  fullscreen  paste  code  hr  tabfocus  visualchars  table  image',
+toolbar: 'insertfile undo redo | styleselect | bold italic  underline  superscript  subscript | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | table image pastetext removeformat | fullscreen visualblocks',
 convert_urls: false,
+branding:  false,
+statusbar:  false,
+autoresize_bottom_margin:  0,
+autoresize_max_height:  900,
+autoresize_min_height:  120,
+autoresize_overflow_padding:  15,
 content_css: '/assets/addons/tinymce4/bootstrap/css/bootstrap.min.css',
 }
 ```
