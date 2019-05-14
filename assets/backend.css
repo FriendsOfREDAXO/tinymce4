@@ -1,7 +1,11 @@
-/*
-.mce-container-body.mce-window-body.mce-abs-layout,
-.mce-container.mce-panel.mce-floatpanel.mce-window.mce-in {
-    max-width: 100% !important;
+.filter-form {
+    padding-top: 16px;
 }
-*/
+.form-group > input,
+.form-group > select {
+    background: #fff;
+}
 
+.file-list {
+    padding: 0 0 40px 0;
+}

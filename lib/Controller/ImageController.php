@@ -1,12 +1,12 @@
 <?php
 namespace Tinymce4\Controller;
 
-class ImageController 
+class ImageController
 {
     public $container;
 
     public function __construct($container) {
-        $this->container = $container; 
+        $this->container = $container;
     }
 
     public function indexAction() {
@@ -24,7 +24,7 @@ class ImageController
                 'category_id' => $category_id,
                 'search' => $search,
             ));
-        
+
     }
 
     public function listAction() {
@@ -54,7 +54,7 @@ class ImageController
         $media = $this->container->get('MediaRepository')
             ->findWhere($sql, $binds, array('originalname'=>'ASC'), $limit, $offset);
         $total = $this->container->get('MediaRepository')
-           ->countWhere($sql, $binds); 
+           ->countWhere($sql, $binds);
         return $this->container->get('RenderService')->render(
             'frontend/image_list.php', array(
                 'media_list' => $media,
@@ -70,7 +70,7 @@ class ImageController
                 'limit' => $limit,
             ));
     }
-   
+
 }
 
 
