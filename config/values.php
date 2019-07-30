@@ -18,6 +18,6 @@ $container->setParameter('translator_pathes',  array(
 // Map redaxo backend languages to tinymce lang package
 $container->setParameter('be_lang_map', array(
     'de_de' => 'de',
-    'en_gb' => 'en_gb',
+    'en_us' => 'en_US',
 ));
 
