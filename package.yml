@@ -1,6 +1,8 @@
 package: tinymce4
 version: '1.2.1'
 author: 'Friends Of REDAXO'
+supportpage: https://github.com/FriendsOfREDAXO/tinymce4
+
 requires:
     redaxo: ^5.1.0
 page:
