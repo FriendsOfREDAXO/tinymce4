@@ -9,7 +9,7 @@
         <li class="list-group-item">
             <a href="" onclick="returnFile(this)"
                data-value="<?php
-                if (in_array($link['filetype'],['image/jpeg', 'image/png', 'image/gif'])) {                
+                if (isset($link['filetype']) && in_array($link['filetype'],['image/jpeg', 'image/png', 'image/gif'])) {                
                     if (in_array(\rex_config::get('tinymce4', 'image_format'), ['default', ''])) {
                         $link['url'] = 'index.php?rex_media_type=tinymcewysiwyg&rex_media_file='.urlencode($link['filename']);
                     } else {

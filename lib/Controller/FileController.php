@@ -277,6 +277,7 @@ class FileController
                 'search'      => $search,
                 'total'       => $this->total,
                 'offset'      => $offset,
+                'limit'       => $limit,
                 'page'        => $page,
             ]);
     }
