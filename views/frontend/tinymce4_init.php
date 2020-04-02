@@ -104,6 +104,11 @@ $(document).on('rex:ready',function(e, container) {
     if (container.find('#REX_FORM').length) {
         removeTiny = true;
     }
+
+    if (container.find('textarea').not('.mce-initialized').length) {
+        removeTiny = true;
+    }
+
     // Erst instanzen zerstören, erforderlich für "Block übernehmen"
     window.setTimeout(function() {
         tinymce4_remove(container, removeTiny);
