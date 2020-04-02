@@ -161,7 +161,7 @@ class FileController
 
             $sql  = \rex_sql::factory();
             $from = "
-                FROM rex_media
+                FROM ".\rex::getTable('media')."
                 WHERE " . implode(' AND ', $where) . "
                 ORDER BY createdate DESC
             ";
