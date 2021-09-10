@@ -1,5 +1,7 @@
 # TinyMCE4-Editor für REDAXO 5
 
+🚨 Deprecated: Dieses AddOn ist veraltet. Verwendung auf eigene Gefahr
+
 ## Default-Profil
 
 ```yml
