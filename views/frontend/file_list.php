@@ -23,7 +23,7 @@
             ><?php echo $link['name']; ?></a>
         </li>
     <?php endforeach; ?>
-    <?php if ($total > $offset + $limit): ?>
+    <?php if ($total > $offset + ($limit ?? 0)): ?>
         <br/>
         <a class="btn btn-default btn-block"
            href="<?php echo $UrlService->getAjaxUrl('/file/index', [
