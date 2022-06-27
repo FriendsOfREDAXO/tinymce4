@@ -19,7 +19,7 @@ class ArticleRepository extends Repository
         $list = $this->findBy(array(
             'startarticle' => 1,
             'clang_id' => $clang_id,
-        ), array('path' => 'ASC', 'priority' => 'ASC'));
+        ), array('path' => 'ASC', 'catpriority' => 'ASC'));
         $cat_idx = array();
         foreach ($list as $cat) {
             $cat_idx[$cat->parent_id][] = $cat;
